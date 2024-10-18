@@ -19,6 +19,7 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       window.localStorage.removeItem('sns_user');
+      window.localStorage.removeItem('hasSeenRequests');
       state.isAuthenticated = false;
       state.user = null;
     },

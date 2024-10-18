@@ -15,8 +15,13 @@ export const login = createAsyncThunk(
         return response.data;
       }
     } catch (error) {
-      // console.log(error.message);
-      return rejectWithValue('wrong usename or password!');
+      if (error.response) {
+        if (error.response.status === 403) {
+          return rejectWithValue('The account has been locked!');
+        }
+        return rejectWithValue(error.response.data || 'An error occurred!');
+      }
+      return rejectWithValue('Wrong username or password!');
     }
   },
 );
@@ -32,10 +37,6 @@ export const register = createAsyncThunk(
         name,
         birthday,
         phone,
-      });
-      toast.success('Registration successful', {
-        position: 'top-center',
-        autoClose: 3000,
       });
 
       return response.data;

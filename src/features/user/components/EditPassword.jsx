@@ -19,7 +19,7 @@ const validationSchema = Yup.object({
     .required('Vui lòng xác nhận mật khẩu mới'),
 });
 
-const { updatePassWord } = userService;
+const { updatePassWord: editPassword } = userService;
 
 const UpdatePassword = () => {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ const UpdatePassword = () => {
     const { password, newPassword } = values;
     try {
       await dispatch(
-        updatePassWord({ currentPassword: password, newPassword }),
+        editPassword({ currentPassword: password, newPassword }),
       );
     } catch (error) {
       console.log(error);

@@ -34,7 +34,7 @@ const AllListFriend = () => {
     <div className="flex min-h-screen justify-center bg-gray-100 pt-[100px]">
       <div className="mx-5 flex h-auto flex-col overflow-hidden rounded-lg bg-white p-6 shadow-xl">
         <h1 className="mb-6 text-center text-3xl font-bold text-gray-900">
-          Danh sách bạn bè
+          All Friend
         </h1>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
           {suggestionList.map((friend) => (
@@ -44,7 +44,7 @@ const AllListFriend = () => {
             >
               <div className="h-1/3 overflow-hidden rounded-t-lg bg-gray-200 shadow-md">
                 <img
-                  src="/login_img.jpg"
+                  src="../../../../public/login_img.jpg"
                   className="h-full w-full object-cover transition-transform duration-300 hover:scale-110"
                   alt="Ảnh bìa"
                 />
@@ -54,7 +54,7 @@ const AllListFriend = () => {
                   src={
                     friend.profilePicture
                       ? `/apihost/image/${friend.profilePicture}`
-                      : '/logo_img.png'
+                      : '../../../../public/logo_img.png'
                   }
                   className="absolute -top-14 h-28 w-28 rounded-full border-4 border-white shadow-lg transition-transform duration-300 hover:scale-105"
                   alt="Ảnh đại diện"

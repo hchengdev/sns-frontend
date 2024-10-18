@@ -76,7 +76,7 @@ const AllListFollowers = () => {
             >
               <div className="h-1/3 overflow-hidden rounded-t-lg bg-gray-200 shadow-md">
                 <img
-                  src="/login_img.jpg"
+                  src="../../../../public/login_img.jpg"
                   className="h-full w-full object-cover transition-transform duration-300 hover:scale-110"
                   alt="Ảnh bìa"
                 />
@@ -86,7 +86,7 @@ const AllListFollowers = () => {
                   src={
                     friend.profilePicture
                       ? `/apihost/image/${friend.profilePicture}`
-                      : '/logo_img.png'
+                      : '../../../../public/logo_img.png'
                   }
                   className="absolute -top-14 h-28 w-28 rounded-full border-4 border-white shadow-lg transition-transform duration-300 hover:scale-105"
                   alt="Ảnh đại diện"
@@ -102,13 +102,13 @@ const AllListFollowers = () => {
                       className="rounded-lg bg-blue-500 px-4 py-1 text-sm text-white transition duration-200 hover:bg-blue-600"
                       onClick={() => handleAcceptFriendRequest(friend.id)}
                     >
-                      Kết bạn
+                      Add friend
                     </button>
                     <button
                       className="w-20 rounded-lg bg-gray-300 p-2 text-xs text-black hover:bg-gray-400"
                       onClick={() => handleReject(friend.id)}
                     >
-                      Hủy
+                      Cancle
                     </button>
                   </div>
                 </div>

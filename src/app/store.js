@@ -8,7 +8,7 @@ const store = configureStore({
     auth: authReducer,
     user: userReducer,
     post: postReducer,
+    // search: searchReducer,
   },
 });
-
 export default store;
