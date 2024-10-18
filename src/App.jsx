@@ -10,7 +10,7 @@ import AllListFriend from './features/friend/components/AllListFriend';
 import 'react-toastify/dist/ReactToastify.css';
 import AllListFollowers from './features/friend/components/AllListFollowers';
 import { ToastContainer } from 'react-toastify';
-import UpdatePassword from './features/user/components/UpdatePassword';
+import EditPassword from './features/user/components/EditPassword.jsx';
 
 import Comments from './features/comment/components/Comment';
 
@@ -34,7 +34,7 @@ const App = () => {
             <Route path="/me" element={<UserProfile />} />
             <Route path="/list-friend" element={<AllListFriend />} />
             <Route path='/list-followers' element={<AllListFollowers />} />
-            <Route path="/update-password" element={<UpdatePassword />} />
+            <Route path="/update-password" element={<EditPassword />} />
             <Route path="/posts/:postId/comments" element={<Comments/>}/>
           </Route>
           <Route path="/login" element={<LoginForm />} />
