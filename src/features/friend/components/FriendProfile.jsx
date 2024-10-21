@@ -170,7 +170,7 @@ const FriendProfile = () => {
             <img
               src={
                 user.profilePicture
-                  ? `/apihost/image/${user.profilePicture}`
+                  ? `/apihost/image/${user.profile_picture}`
                   : ''
               }
               className="h-32 w-32 rounded-full object-cover"

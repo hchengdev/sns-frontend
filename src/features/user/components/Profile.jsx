@@ -71,14 +71,13 @@ const Profile = () => {
   }, [id, getUser]);
 
   return (
-    <div className="space-between mb-12 flex justify-center pt-[100px]">
-      <div className="w-[15%]">
+    <div className="grid grid-cols-1 justify-center gap-4 bg-[#f5f5f5] pt-[100px] md:grid-cols-12">
+      <div className="col-span-2 col-start-1 hidden w-full md:col-span-2 md:col-start-2 md:inline-block">
         <NavBar />
       </div>
-      <div className="mx-5 flex h-[100vh] w-[50%] flex-col overflow-hidden border-solid border-l-zinc-400 bg-[#fff] px-[20px] py-[5px]">
-        <header className="m-4 hidden w-full justify-between sm:flex">
-          <h1 className="text-xl">Profile</h1>
-        </header>
+
+      {/* Post List (Main Content) */}
+      <div className="col-span-5 mx-2 mb-10 h-auto w-full">
         <div className="hide-scrollbar mx-auto flex flex-1 flex-col items-center overflow-y-auto">
           <div className="flex items-center">
             <img
@@ -124,8 +123,12 @@ const Profile = () => {
           <UserPost />
         </div>
       </div>
-      <div className="w-[20%]">
-        <ListFollowerAndFriendUser />
+
+      {/* Friend List (hidden on small screens) */}
+      <div className="col-span-2 hidden w-[130%] md:block">
+        <div className="sticky top-[100px]">
+          <ListFollowerAndFriendUser />
+        </div>
       </div>
     </div>
   );

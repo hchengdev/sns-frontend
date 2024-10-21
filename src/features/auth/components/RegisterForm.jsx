@@ -5,10 +5,20 @@ import { object, string, ref, date } from 'yup';
 import authService from '../services/auth';
 import { register } from '../services/auth';
 import { useDispatch } from 'react-redux';
+import { CometChat } from '@cometchat-pro/chat';
+import React, { useEffect, useState } from 'react';
 
 export default function Register() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const appId = '2659213675dbee2c';
+  const region = 'us';
+  const appSettings = new CometChat.AppSettingsBuilder()
+    .subscribePresenceForAllUsers()
+    .setRegion('us')
+    .build();
+  const authKey = '09bb9cb5972fb724637f56a3f40175cfd9c737fc';
 
   const registrationSchema = object({
     name: string().required('Vui lòng nhập tên'),
@@ -41,6 +51,18 @@ export default function Register() {
     onSubmit: async (values) => {
       try {
         dispatch(register(values));
+        const uid = values.name.replace(/[@.]/g, '_');
+        var user = new CometChat.User(uid);
+        user.setName(values.name);
+        CometChat.createUser(user, authKey).then(
+          (user) => {
+            console.log('User created successfully:', user);
+          },
+          (error) => {
+            console.log('Error creating user:', error);
+          },
+        );
+
         navigate('/login');
       } catch (error) {
         console.log(error);
@@ -48,6 +70,17 @@ export default function Register() {
       }
     },
   });
+
+  useEffect(() => {
+    CometChat.init(appId, appSettings).then(
+      () => {
+        console.log('Khởi tạo thành công');
+      },
+      (error) => {
+        console.log('Khởi tạo thất bại với lỗi:', error);
+      },
+    );
+  }, []);
 
   return (
     <>

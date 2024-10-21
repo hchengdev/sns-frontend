@@ -114,7 +114,7 @@ const ListFriend = () => {
           </Link>
         </div>
       ) : (
-        <p>Không có bạn bè</p>
+        <p className="text-center">Không có bạn bè</p>
       )}
       <hr className="my-4" />
       {friendRequests.length > 0 ? (
