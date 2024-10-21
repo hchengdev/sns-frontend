@@ -168,11 +168,8 @@ const FriendProfile = () => {
         <div className="hide-scrollbar mx-auto flex flex-1 flex-col items-center overflow-y-auto">
           <div className="flex items-center">
             <img
-              src={
-                user.profilePicture
-                  ? `/apihost/image/${user.profilePicture}`
-                  : ''
-              }
+              src={`/apihost/image/${user.profile_picture}`}
+
               className="h-32 w-32 rounded-full object-cover"
               alt="profile_picture"
             />

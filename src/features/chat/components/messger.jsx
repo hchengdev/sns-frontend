@@ -205,7 +205,7 @@ const ChatApp = () => {
     };
 
     return (
-        <div className="flex flex-col h-screen bg-gray-50">
+        <div className="flex flex-col h-screen bg-gray-50" style={{ marginTop: '4rem', height: '46rem' }}>
             <header className="bg-blue-600 text-white p-4 text-center text-2xl font-bold shadow-md">
                 <MessageOutlined /> Group Chat
             </header>

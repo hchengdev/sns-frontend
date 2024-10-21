@@ -5,14 +5,10 @@ import userService from '../../src/features/user/services/user';
 import { useEffect, useState } from 'react';
 import { getUserFromLocalStorage } from '../utils/axiosClient';
 import SearchForm from '../features/user/components/SearchForm';
-import {
-  faUser,
-  faPencilAlt,
-  faPowerOff,
-  faCog, faBell
-} from '@fortawesome/free-solid-svg-icons';
+import { faUser, faPencilAlt, faPowerOff, faCog, faBell } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import Notifications from '../features/notifications/components/Notifications.jsx';
+import { MessageOutlined } from '@ant-design/icons'; // Import MessageOutlined từ Ant Design
 
 const DropdownList = () => {
   const dispatch = useDispatch();
@@ -30,28 +26,18 @@ const DropdownList = () => {
           </Link>
         </li>
         <li className="rounded-lg py-1 pl-5 hover:bg-gray-200">
-          <Link
-            to="/update-profile"
-            className="flex h-8 items-center text-gray-600"
-          >
+          <Link to="/update-profile" className="flex h-8 items-center text-gray-600">
             <FontAwesomeIcon icon={faPencilAlt} className="mr-2" /> Edit Profile
           </Link>
         </li>
         <li className="rounded-lg py-1 pl-5 hover:bg-gray-200">
-          <Link
-            to="/update-password"
-            className="flex h-8 items-center text-gray-600"
-          >
+          <Link to="/update-password" className="flex h-8 items-center text-gray-600">
             <FontAwesomeIcon icon={faCog} className="mr-2" />
             Update Password
           </Link>
         </li>
         <li className="rounded-lg py-1 pl-5 hover:bg-gray-200">
-          <Link
-            to="/login"
-            className="flex h-8 items-center text-gray-600"
-            onClick={handleLogout}
-          >
+          <Link to="/login" className="flex h-8 items-center text-gray-600" onClick={handleLogout}>
             <FontAwesomeIcon icon={faPowerOff} className="mr-2" /> Log out
           </Link>
         </li>
@@ -63,14 +49,9 @@ const DropdownList = () => {
 const UserInformation = ({ user }) => {
   return (
     <div className="group flex h-16 cursor-pointer items-center justify-center leading-[65px]">
-      <h5 className="mr-2 inline-block text-[14px] font-medium text-white">
-        {user.name}
-      </h5>
-
+      <h5 className="mr-2 inline-block text-[14px] font-medium text-white">{user.name}</h5>
       <img
-        src={
-          user.profilePicture ? `/apihost/image/${user.profilePicture}` : null
-        }
+        src={user.profilePicture ? `/apihost/image/${user.profilePicture}` : null}
         className="h-[50px] w-[50px] rounded-full border-2 border-white border-opacity-80 object-cover"
         alt="profile"
         style={{ transform: 'scale(0.8)' }}
@@ -108,18 +89,13 @@ const Header = () => {
         <div className="col-span-8 grid h-full w-full grid-cols-4 items-center">
           <SearchForm />
 
-          {/*/!* Thêm phần nút thông báo *!/*/}
-          {/*<div className="relative">*/}
-          {/*  <button onClick={toggleNotifications} className="flex justify-center text-white ml-2">*/}
-          {/*    <FontAwesomeIcon icon={faBell} className="text-xl" />*/}
-          {/*  </button>*/}
+          {/* Thêm icon tin nhắn */}
+          <div className="flex justify-center items-center cursor-pointer">
+            <Link to="/messager" className="text-white">
+              <MessageOutlined style={{ fontSize: '24px' }} />
+            </Link>
+          </div>
 
-          {/*  {showNotifications && (*/}
-          {/*    <div className="absolute right-0 mt-2 w-80 bg-white shadow-lg rounded-lg p-4 z-10">*/}
-          {/*      <Notifications userId={user.id} /> /!* Hiển thị danh sách thông báo *!/*/}
-          {/*    </div>*/}
-          {/*  )}*/}
-          {/*</div>*/}
           {user ? <UserInformation user={user} /> : <LoginButton />}
         </div>
       </div>

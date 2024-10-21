@@ -14,9 +14,9 @@ import ChatApp from './features/chat/components/messger';
 import UpdatePassword from './features/user/components/EditPassword.jsx';
 import Comments from './features/comment/components/Comment';
 import SearchForm from './features/post/components/SearchForm'
-
+import FriendProfile from './features/friend/components/FriendProfile.jsx';
 import Notifications from './features/notifications/components/Notifications.jsx';
-
+import ListFriendByFriend from './features/friend/components/ListFriendByFirend.jsx';
 const Layout = () => (
   <>
     <Header />
@@ -43,6 +43,9 @@ const App = () => {
             <Route path="/update-password" element={<UpdatePassword />} />
             <Route path="/posts/:postId/comments" element={<Comments />} />
             <Route path='/messager' element={<ChatApp />} />
+            <Route path="/users/:id" element={<FriendProfile />} />
+            <Route path="/search-users" element={<ListFriendByFriend />} />
+
           </Route>
           <Route path="/login" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
