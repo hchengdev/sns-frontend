@@ -25,17 +25,17 @@ const ListFriend = () => {
   });
 
   useEffect(() => {
-    const fetchFollowing = async () => {
-      try {
-        const response = await dispatch(getFollowing());
-        setSuggestionList(response?.payload || []);
-      } catch {
-        setSuggestionList([]);
-      }
-    };
-
     fetchFollowing();
   }, [dispatch, getFollowing, friendRequests]);
+
+  const fetchFollowing = async () => {
+    try {
+      const response = await dispatch(getFollowing());
+      setSuggestionList(response?.payload || []);
+    } catch {
+      setSuggestionList([]);
+    }
+  };
 
   useEffect(() => {
     const fetchWaitingRequests = async () => {
@@ -56,6 +56,7 @@ const ListFriend = () => {
       acceptFriends({ id: userId });
       setFriendRequests(friendRequests.filter((user) => user.id !== userId));
       toast.success('Đã xác nhận yêu cầu kết bạn thành công!');
+      fetchFollowing();
     } catch {
       toast.error('Có lỗi xảy ra, vui lòng thử lại.');
     }
@@ -114,7 +115,7 @@ const ListFriend = () => {
           </Link>
         </div>
       ) : (
-        <p>Không có bạn bè</p>
+        <p className="text-center">Không có bạn bè</p>
       )}
       <hr className="my-4" />
       {friendRequests.length > 0 ? (

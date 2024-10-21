@@ -18,7 +18,7 @@ export default function Home() {
       </div>
 
       {/* Friend List (hidden on small screens) */}
-      <div className="col-span-2 hidden md:block">
+      <div className="col-span-2 hidden w-[130%] md:block">
         <div className="sticky top-[100px]">
           <ListFriend />
         </div>

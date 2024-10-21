@@ -79,8 +79,7 @@ export default function Register() {
               onBlur={formik.handleBlur}
             />
             {formik.errors.name && formik.touched.name && (
-              <p className="mb-2 text-sm text-red-500">{formik.errors.name}</p>
-            )}
+              <p className="mb-2 text-sm text-red-500">{formik.errors.name}</p>)}
 
             <input
               type="email"
