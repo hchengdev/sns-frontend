@@ -12,7 +12,7 @@ const Profile = () => {
   const storedUser = getUserFromLocalStorage();
   const id = storedUser ? storedUser.id : null;
   const { getUser } = userService;
-  const { getFollowing, getWaiting } = friendService;
+  const { getFollowing, getWaiting, getWaitingFriend } = friendService;
   const [user, setUser] = useState({
     name: '',
     email: '',
@@ -37,17 +37,18 @@ const Profile = () => {
   }, [dispatch, getFollowing]);
 
   useEffect(() => {
-    const fetchFollowers = async () => {
+    const fetchWaitingRequests = async () => {
       try {
-        const response = await dispatch(getWaiting());
-        setFollowers(response?.payload || []);
+        const response = await getWaitingFriend();
+
+        setFollowers(response);
       } catch {
         setFollowers([]);
       }
     };
 
-    fetchFollowers();
-  }, [dispatch, getWaiting]);
+    fetchWaitingRequests();
+  }, [getWaiting]);
 
   useEffect(() => {
     const fetchData = async () => {
