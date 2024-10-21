@@ -7,7 +7,13 @@ import { FaUserPlus, FaTimes } from 'react-icons/fa';
 
 const ListFriend = () => {
   const dispatch = useDispatch();
-  const { getFollowing, getWaiting, acceptFriends, unFriend } = friendService;
+  const {
+    getFollowing,
+    getWaiting,
+    acceptFriends,
+    unFriend,
+    getWaitingFriend,
+  } = friendService;
   const [suggestionList, setSuggestionList] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -34,7 +40,7 @@ const ListFriend = () => {
   useEffect(() => {
     const fetchWaitingRequests = async () => {
       try {
-        const response = await getWaiting();
+        const response = await getWaitingFriend();
 
         setFriendRequests(response);
       } catch {
