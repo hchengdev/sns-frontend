@@ -40,7 +40,7 @@ const Post = ({ post }) => {
     const { isLike } = likeState;
     try {
       const response = await dispatch(toggleLikePost(post.id)).unwrap();
-      if (response && response.likeCount !== undefined){
+      if (response && response.likeCount !== undefined) {
         setLikeState(prev => ({
           ...prev,
           isLiked: !isLike,
@@ -50,10 +50,10 @@ const Post = ({ post }) => {
         const likedPost = JSON.parse(localStorage.getItem('likedPosts')) || {};
         likedPost[post.id] = !isLike;
         localStorage.setItem('likePosts', JSON.stringify(likedPost));
-      }else {
+      } else {
         throw new Error('LikeCount không có trong phản hồi');
       }
-    }catch (error){
+    } catch (error) {
       console.error('Thao tác thích không thành công:', error);
       toast.error('Có lỗi xảy ra khi thực hiện thao tác thích.');
     }
@@ -149,7 +149,7 @@ const Post = ({ post }) => {
 
   const renderLike = () => {
     const tooltipContent = likeState.likedByUsers.length > 0
-    ? likeState.likedByUsers.map(user => user.name).join(', ')
+      ? likeState.likedByUsers.map(user => user.name).join(', ')
       : 'Chưa có ai thích';
     return (
       <Tooltip title={tooltipContent} placement="top">
@@ -181,8 +181,8 @@ const Post = ({ post }) => {
               <h2 className="cursor-pointer font-semibold flex items-center">
                 <span className="pl-1.5 font-normal text-slate-500">User {post.userId}</span>
                 <span className="ml-2 text-sm text-gray-500 flex items-center">
-              {getVisibilityText(post.visibility)}
-            </span>
+                  {getVisibilityText(post.visibility)}
+                </span>
               </h2>
               {post.userId === userId && (
                 <>
@@ -216,13 +216,13 @@ const Post = ({ post }) => {
 
             {isEditing ? (
               <div>
-              <textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                className="mt-3 w-full resize-none rounded-xl bg-slate-100 p-2 pb-3 focus:outline-none"
-                placeholder="Nội dung bài đăng..."
-                rows={4}
-              />
+                <textarea
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  className="mt-3 w-full resize-none rounded-xl bg-slate-100 p-2 pb-3 focus:outline-none"
+                  placeholder="Nội dung bài đăng..."
+                  rows={4}
+                />
                 <div className="flex mt-2">
                   <select
                     value={visibility}

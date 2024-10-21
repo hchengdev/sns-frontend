@@ -70,11 +70,10 @@ export default function Register() {
               type="text"
               name="name"
               placeholder="Name"
-              className={`mb-4 w-full border p-3 ${
-                formik.errors.name && formik.touched.name
+              className={`mb-4 w-full border p-3 ${formik.errors.name && formik.touched.name
                   ? 'border-red-500'
                   : 'border-gray-300'
-              } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
               value={formik.values.name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -87,11 +86,10 @@ export default function Register() {
               type="email"
               name="email"
               placeholder="Email"
-              className={`mb-4 w-full border p-3 ${
-                formik.errors.email && formik.touched.email
+              className={`mb-4 w-full border p-3 ${formik.errors.email && formik.touched.email
                   ? 'border-red-500'
                   : 'border-gray-300'
-              } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
               value={formik.values.email}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -104,11 +102,10 @@ export default function Register() {
               type="password"
               name="password"
               placeholder="Mật khẩu"
-              className={`mb-4 w-full border p-3 ${
-                formik.errors.password && formik.touched.password
+              className={`mb-4 w-full border p-3 ${formik.errors.password && formik.touched.password
                   ? 'border-red-500'
                   : 'border-gray-300'
-              } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
               value={formik.values.password}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -123,11 +120,10 @@ export default function Register() {
               type="password"
               name="confirmPassword"
               placeholder="Xác nhận mật khẩu"
-              className={`mb-4 w-full border p-3 ${
-                formik.errors.confirmPassword && formik.touched.confirmPassword
+              className={`mb-4 w-full border p-3 ${formik.errors.confirmPassword && formik.touched.confirmPassword
                   ? 'border-red-500'
                   : 'border-gray-300'
-              } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
               value={formik.values.confirmPassword}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -142,11 +138,10 @@ export default function Register() {
             <input
               type="date"
               name="birthday"
-              className={`mb-4 w-full border p-3 ${
-                formik.errors.birthday && formik.touched.birthday
+              className={`mb-4 w-full border p-3 ${formik.errors.birthday && formik.touched.birthday
                   ? 'border-red-500'
                   : 'border-gray-300'
-              } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
               value={formik.values.birthday}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -161,11 +156,10 @@ export default function Register() {
               type="number`"
               name="phone"
               placeholder="Số điện thoại"
-              className={`mb-4 w-full border p-3 ${
-                formik.errors.phone && formik.touched.phone
+              className={`mb-4 w-full border p-3 ${formik.errors.phone && formik.touched.phone
                   ? 'border-red-500'
                   : 'border-gray-300'
-              } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
               value={formik.values.phone}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}

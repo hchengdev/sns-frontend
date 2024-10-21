@@ -85,7 +85,7 @@ const UpdateProfile = () => {
     }
 
     try {
-      await updateUser(formData);
+      updateUser(formData);
     } catch (error) {
       console.error('Error updating profile:', error);
     } finally {

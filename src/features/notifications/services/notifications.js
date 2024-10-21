@@ -86,5 +86,3 @@ export const countUnreadNotifications = async (userId) => {
     throw error; // Ném lỗi để xử lý ở nơi gọi
   }
 };
-
-
