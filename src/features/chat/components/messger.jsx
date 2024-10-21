@@ -10,10 +10,12 @@ import {
     loadMessages,
     countMembers,
     addMemberToGroup,
-    deleteMessage
+    deleteMessage,
+    removeMemberFromGroup
 } from '../services/messager';
 import { Button } from 'antd';
 import { DeleteOutlined, UserAddOutlined, UsergroupAddOutlined, MessageOutlined, TeamOutlined, SmileOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 const socket = io('http://localhost:8089');
 const DEFAULT_PROFILE_PIC = 'https://via.placeholder.com/40';
@@ -47,7 +49,7 @@ const ChatApp = () => {
     const [memberCount, setMemberCount] = useState(0);
     const [userList, setUserList] = useState([]);
     const [showUserList, setShowUserList] = useState(false);
-    const [showMemberList, setShowMemberList] = useState(false); // New state for member list visibility
+    const [showMemberList, setShowMemberList] = useState(false);
     const [socketInstance, setSocket] = useState(null);
     const [messageInfoVisible, setMessageInfoVisible] = useState(null);
     const [selectedUsers, setSelectedUsers] = useState([]);
@@ -55,6 +57,7 @@ const ChatApp = () => {
     const emojis = ['😀', '😂', '😍', '😎', '😢', '😡', '👍', '🎉', '❤️', '🙌'];
 
     const messagesEndRef = useRef(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const connect = async () => {
@@ -113,6 +116,10 @@ const ChatApp = () => {
         }
     };
 
+    const selectUser1 = (user) => {
+        navigate(`/users/${user.id}`);
+    };
+
     const sendMessage = async () => {
         if (!messageContent || !selectedGroupId) return alert('Please enter a message and select a group.');
 
@@ -160,7 +167,7 @@ const ChatApp = () => {
     };
 
     const toggleMemberList = () => {
-        setShowMemberList(!showMemberList); // Toggle member list visibility
+        setShowMemberList(!showMemberList);
     };
 
     const selectUser = (user) => {
@@ -176,7 +183,7 @@ const ChatApp = () => {
         if (selectedUsers.length === 0 || !selectedGroupId) return alert('Please select a user to add.');
         try {
             await Promise.all(selectedUsers.map(user => addMemberToGroup(selectedGroupId, user.id)));
-            alert(`Users added to group.`);
+            alert('Users added to group.');
             setSelectedUsers([]);
             await loadUserGroupsData();
         } catch (error) {
@@ -204,9 +211,24 @@ const ChatApp = () => {
         setEmojiPickerVisible(false);
     };
 
+    // Hàm rời khỏi nhóm
+    const leaveCurrentGroup = async () => {
+        if (!selectedGroupId || !userId) return alert('Bạn không thể rời khỏi nhóm này.');
+
+        try {
+            await removeMemberFromGroup(selectedGroupId, userId);
+            alert('Bạn đã rời khỏi nhóm.');
+            setSelectedGroupId(null);
+            setMessages([]); // Xóa tin nhắn đã tải cho nhóm này
+            await loadUserGroupsData(); // Tải lại danh sách nhóm
+        } catch (error) {
+            alert('Có lỗi xảy ra khi rời nhóm.');
+        }
+    };
+
     return (
-        <div className="flex flex-col h-screen bg-gray-50" style={{ marginTop: '4rem', height: '46rem' }}>
-            <header className="bg-blue-600 text-white p-4 text-center text-2xl font-bold shadow-md">
+        <div className="flex flex-col h-screen bg-gray-50" style={{ height: '46rem' }}>
+            <header className="bg-blue-600 text-white p-4 text-center text-2xl font-bold shadow-md" style={{ marginTop: '4rem' }}>
                 <MessageOutlined /> Group Chat
             </header>
             <div className="flex flex-grow">
@@ -236,6 +258,7 @@ const ChatApp = () => {
                                         src={member.profilePicture ? `/apihost/image/${member.profilePicture}` : DEFAULT_PROFILE_PIC}
                                         className="w-10 h-10 rounded-full"
                                         alt={member.name || 'Unknown Member'}
+                                        onClick={() => selectUser1(member)}
                                     />
                                     <span className="ml-2">{member.name || 'Unknown Member'}</span>
                                 </div>
@@ -268,9 +291,9 @@ const ChatApp = () => {
                         <strong>Selected Users:</strong> {selectedUsers.map(user => user.name).join(', ')}
                     </div>
                     <button onClick={addMember} className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300 mt-2">Confirm Add</button>
+
                 </div>
 
-                {/* Middle: Message Display */}
                 <div className="flex-grow p-4 flex flex-col">
                     <div className="text-xl font-bold mb-4">
                         {selectedGroupId && userGroups.find(group => group.id === selectedGroupId)?.name}
@@ -301,7 +324,7 @@ const ChatApp = () => {
                                 </div>
                             </div>
                         ))}
-                        <div ref={messagesEndRef} /> {/* Phần cuộn xuống */}
+                        <div ref={messagesEndRef} />
                     </div>
                     <div className="flex items-center mb-2">
                         <button onClick={() => setEmojiPickerVisible(!emojiPickerVisible)} className="text-gray-600 hover:text-blue-600 mr-2">
@@ -329,7 +352,6 @@ const ChatApp = () => {
                     </div>
                 </div>
 
-                {/* Right Side: User Groups */}
                 <aside className="w-1/4 p-4 border-l border-gray-300 bg-white shadow-lg">
                     <h3 className="font-bold text-lg mb-2"><TeamOutlined /> Your Groups:</h3>
                     <ul className="list-none mb-4">
@@ -346,6 +368,9 @@ const ChatApp = () => {
                             </li>
                         ))}
                     </ul>
+                    <button onClick={leaveCurrentGroup} className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition duration-300 mt-2">
+                        Rời khỏi nhóm
+                    </button>
                 </aside>
             </div>
         </div>

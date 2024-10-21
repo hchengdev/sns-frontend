@@ -9,6 +9,7 @@ const UserList = () => {
   const storedUser = getUserFromLocalStorage();
   const meId = storedUser.id;
 
+  console.log("first", listUser)
   return (
     <div className="space-between mb-12 flex justify-center pt-[100px]">
       <div className="w-[15%]">
@@ -61,8 +62,7 @@ const UserList = () => {
             </li>
           ))}
         </ul>
-      </div>
-      <div className="w-[20%]"></div>
+      </div><div className="w-[20%]"></div>
     </div>
   );
 };

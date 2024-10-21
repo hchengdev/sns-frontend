@@ -14,6 +14,9 @@ const SearchForm = () => {
     (state) => state.user
   );
 
+  console.log("first2", listUser)
+
+
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
 

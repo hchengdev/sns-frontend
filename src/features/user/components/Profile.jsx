@@ -90,8 +90,7 @@ const Profile = () => {
               alt="profile_picture"
             />
             <div className="ml-8">
-              <h2 className="mb-1 ml-1 font-semibold">{user.name}</h2>
-              <h2 className="mb-3">{user.email}</h2>
+              <h2 className="mb-1 ml-1 font-semibold">{user.name}</h2><h2 className="mb-3">{user.email}</h2>
               <Link
                 to="/update-profile"
                 className="text-x mt-4 cursor-pointer rounded-lg border bg-slate-200 p-1 text-center font-semibold text-slate-600 hover:bg-slate-100"

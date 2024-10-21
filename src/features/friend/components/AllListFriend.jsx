@@ -70,8 +70,7 @@ const AllListFriend = () => {
             </div>
           ))}
         </div>
-      </div>
-    </div>
+      </div></div>
   );
 };
 

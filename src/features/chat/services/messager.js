@@ -171,3 +171,19 @@ export const messageListener = async (message, setMessages) => {
         console.error('Lỗi khi lưu tin nhắn:', error);
     }
 };
+// Hàm xóa thành viên khỏi nhóm
+export const removeMemberFromGroup = async (groupId, userId) => {
+    const token = getUserFromLocalStorage();
+    try {
+        const response = await axios.delete(`${API_URL}/${groupId}/removeMember/${userId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Lỗi khi xóa thành viên:', error);
+        throw error;
+    }
+};
