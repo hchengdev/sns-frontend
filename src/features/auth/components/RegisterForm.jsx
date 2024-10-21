@@ -154,7 +154,8 @@ export default function Register() {
             <input
               type="number`"
               name="phone"
-              placeholder="Số điện thoại"className={`mb-4 w-full border p-3 ${formik.errors.phone && formik.touched.phone
+              placeholder="Số điện thoại"
+              className={`mb-4 w-full border p-3 ${formik.errors.phone && formik.touched.phone
                   ? 'border-red-500'
                   : 'border-gray-300'
                 } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}

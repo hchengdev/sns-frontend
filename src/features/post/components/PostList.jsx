@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllPosts } from '../services/post.js';
+import { getAllPosts } from '../services/post';
 import Post from './Post';
 import PostForm from './PostForm.jsx';
 
 const PostList = () => {
   const dispatch = useDispatch();
   const { posts, isLoading, error } = useSelector((state) => state.post);
-  const [updatedPosts, setUpdatedPosts] = useState(posts);// State để quản lý việc hiển thị bình luận
+  const [updatedPosts, setUpdatedPosts] = useState(posts);
 
   useEffect(() => {
     dispatch(getAllPosts());
@@ -16,7 +16,6 @@ const PostList = () => {
   useEffect(() => {
     setUpdatedPosts(posts);
   }, [posts]);
-
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -28,18 +27,13 @@ const PostList = () => {
 
   return (
     <div>
-      <div>
-        <PostForm />
-      </div>
-
+      <PostForm />
       {updatedPosts.length === 0 ? (
         <p>No posts available</p>
       ) : (
         <div>
           {updatedPosts.map((post) => (
-            <div key={post.id}>
-              <Post post={post} />
-            </div>
+            <Post key={post.id} post={post} />
           ))}
         </div>
       )}
