@@ -20,6 +20,7 @@ const FriendProfile = () => {
     getWaiting,
     acceptFriends,
     getWaitingFriend,
+    getWaitingFriend2,
   } = friendService;
 
   const [user, setUser] = useState({
@@ -74,7 +75,7 @@ const FriendProfile = () => {
   useEffect(() => {
     const fetchFollowers = async () => {
       try {
-        const response = await getWaitingFriend();
+        const response = await getWaitingFriend2();
         setListWaiting(response);
       } catch {
         setListWaiting([]);

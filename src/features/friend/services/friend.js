@@ -71,6 +71,25 @@ const getWaitingFriend = async () => {
     }
 };
 
+const getWaitingFriend2 = async ({ id }) => {
+  try {
+    const response = await axios.get(
+      `/apihost//api/v1/me/waiting-friend/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error('Error during user fetch:', error);
+    throw error;
+  }
+};
+
 const getFriendsByFriendsId = async ({ id }) => {
     const token = getTokenFromLocalStorage();
     try {
@@ -158,12 +177,14 @@ export const mutualFriends = createAsyncThunk(
 );
 
 export default {
-    getFollowing,
-    getWaiting,
-    getFriendsByFriendsId,
-    unFriend,
-    addFriend,
-    acceptFriends,
-    getWaitingFriend,
-    mutualFriends,
+  getFollowing,
+  getWaiting,
+  getFriendsByFriendsId,
+  unFriend,
+  addFriend,
+  acceptFriends,
+  getWaitingFriend,
+  mutualFriends,
+  getWaitingFriend2,
 };
+
