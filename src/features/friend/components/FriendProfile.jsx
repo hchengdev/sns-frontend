@@ -169,7 +169,7 @@ const FriendProfile = () => {
           <div className="flex items-center">
             <img
               src={
-                user.profilePicture
+                user.profile_picture
                   ? `/apihost/image/${user.profile_picture}`
                   : ''
               }
