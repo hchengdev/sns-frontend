@@ -13,9 +13,8 @@ const NavBar = () => {
           <li>
             <Link
               to="/"
-              className={`flex cursor-pointer gap-3 rounded-[15rem] px-3 py-4 hover:bg-slate-200 active:bg-slate-100 ${
-                location.pathname === '/' ? 'font-bold' : ''
-              }`}
+              className={`flex cursor-pointer gap-3 rounded-[15rem] px-3 py-4 hover:bg-slate-200 active:bg-slate-100 ${location.pathname === '/' ? 'font-bold' : ''
+                }`}
             >
               {location.pathname === '/' ? (
                 <>
@@ -29,7 +28,7 @@ const NavBar = () => {
                 <>
                   <FaHouse className="text-[1.6rem]" />
                   <h2 className="hidden px-1 text-xl xl:block">Trang chủ</h2>
-   </>
+                </>
               )}
             </Link>
           </li>
@@ -38,9 +37,8 @@ const NavBar = () => {
           <li>
             <Link
               to="/me"
-              className={`flex cursor-pointer gap-3 rounded-[15rem] px-3 py-4 hover:bg-slate-200 active:bg-slate-100 ${
-                location.pathname === '/me' ? 'font-bold' : ''
-              }`}
+              className={`flex cursor-pointer gap-3 rounded-[15rem] px-3 py-4 hover:bg-slate-200 active:bg-slate-100 ${location.pathname === '/me' ? 'font-bold' : ''
+                }`}
             >
               {location.pathname === '/me' ? (
                 <>
@@ -63,9 +61,8 @@ const NavBar = () => {
           <li>
             <Link
               to="/posts"
-              className={`flex cursor-pointer gap-3 rounded-[15rem] px-3 py-4 hover:bg-slate-200 active:bg-slate-100 ${
-                location.pathname === '/posts' ? 'font-bold' : ''
-              }`}
+              className={`flex cursor-pointer gap-3 rounded-[15rem] px-3 py-4 hover:bg-slate-200 active:bg-slate-100 ${location.pathname === '/posts' ? 'font-bold' : ''
+                }`}
             >
               {location.pathname === '/posts' ? (
                 <>

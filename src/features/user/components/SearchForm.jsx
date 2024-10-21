@@ -91,7 +91,7 @@ const SearchForm = () => {
                   <Link to={`/me`}>
                     <div className="ml-5 flex items-center">
                       <img
-                        src={user.profilePicture}
+                        src={`/apihost/image/${user.profilePicture}`}
                         alt={user.name}
                         className="mr-2 h-[40px] w-[40px] rounded-full"
                       />
@@ -107,7 +107,7 @@ const SearchForm = () => {
                   <Link to={`/users/${user.id}`}>
                     <div className="ml-5 flex items-center">
                       <img
-                        src={user.profilePicture}
+                        src={`/apihost/image/${user.profilePicture}`}
                         alt={user.name}
                         className="mr-2 h-[40px] w-[40px] rounded-full"
                       />
