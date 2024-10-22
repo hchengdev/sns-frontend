@@ -135,13 +135,17 @@ const Post = ({ post }) => {
     setComments((prevComments) => [...prevComments, newComment]);
   };
 
+  const handleClickOutside = () => {
+    setShowOptions(false);
+  };
+
   const renderMedia = () => (
     <Carousel arrows infinite={false}>
       {post.media.map((mediaItem, index) => (
         <div key={mediaItem.id}>
           <img
             src={`/apihost${mediaItem.url}`}
-            className="mx-auto my-2 max-h-80 max-w-full rounded-md"
+            className="mx-auto my-2 max-h-80 max-w-[80vh] rounded-md"
             alt={`post media ${index + 1}`}
           />
         </div>
@@ -171,18 +175,17 @@ const Post = ({ post }) => {
 
   return (
     <div className="pb-5">
-      <div className="border rounded-xl overflow-hidden border-l border-solid border-zinc-300 bg-white shadow-md rounded-lg">
-        <div className="ml-0 flex py-3 pl-2 pr-1 sm:mr-0 sm:px-5 sm:pr-0">
-          <div className="mt-3 h-12 w-12 flex-none text-lg">
-            <img
-              src={userProfileImg}
-              className="h-12 w-12 flex-none cursor-pointer rounded-full object-cover"
-              alt="avatar"
-            />
-          </div>
-
+      <div
+        className="border rounded-xl overflow-hidden border-l border-solid border-zinc-300 bg-white shadow-md rounded-lg">
+        <div className="ml-0 flex py-3 pl-2 pr-1 hover:bg-sky-100 sm:mr-0 sm:px-5 sm:pr-0">
           <div className="w-full px-4 py-3">
-            <div className="relative flex w-full justify-between">
+
+            <div className="relative flex w-full ">
+              <img
+                src={userProfileImg}
+                className="h-12 w-12 flex-none cursor-pointer rounded-full object-cover"
+                alt="avatar"
+              />
               <h2 className="cursor-pointer font-semibold flex items-center">
                 <span className="pl-1.5 font-normal text-slate-500">
                   {post.createdBy.name}
@@ -192,38 +195,41 @@ const Post = ({ post }) => {
                   {getVisibilityText(post.visibility)}
                 </span>
               </h2>
-              <span className="text-xs text-gray-400 ml-2">
-              {parseDateString(post.createdAt).toLocaleString()} {/* Hiển thị thời gian */}
+              <div className="absolute top-0 right-0 flex ">
+                <span className="text-xs text-gray-400 mr-2 ">
+              {parseDateString(post.createdAt).toLocaleString()}
             </span>
-              {/*<p className="text-sm text-gray-600">{formatDate(post.createdAt) || 'Unknown Date'}</p>*/}
 
-              {post.userId === userId && (
-                <>
-                  <HiDotsHorizontal className="mr-3 cursor-pointer" onClick={toggleOptions} />
-                  {showOptions && (
-                    <div
-                      className="absolute right-7 top-0 z-20 rounded-xl border border-slate-300 bg-white font-semibold text-slate-600 shadow-xl">
-                      <ul className="cursor-pointer text-start">
-                        <li
-                          className="rounded-xl px-5 py-2 hover:bg-slate-200"
-                          onClick={() => {
-                            setIsEditing(true);
-                            setShowOptions(false);
-                          }}
-                        >
-                          Cập nhật
-                        </li>
-                        <li
-                          className="rounded-xl px-5 py-2 hover:bg-slate-200"
-                          onClick={handleDeletePost}
-                        >
-                          Xoá
-                        </li>
-                      </ul>
-                    </div>
-                  )}
-                </>
-              )}
+                {post.userId === userId && (
+                  <>
+                    <HiDotsHorizontal className="mr-3 cursor-pointer" onClick={toggleOptions} />
+                    {showOptions && (
+                      <div onClick={handleClickOutside} className="absolute inset-0 z-10">
+                      <div
+                        className="absolute right-7 top-0 z-20 rounded-xl border border-slate-300 bg-white font-semibold text-slate-600 shadow-xl">
+                        <ul className="cursor-pointer text-start">
+                          <li
+                            className="rounded-xl px-5 py-2 hover:bg-slate-200"
+                            onClick={() => {
+                              setIsEditing(true);
+                              setShowOptions(false);
+                            }}
+                          >
+                            Cập nhật
+                          </li>
+                          <li
+                            className="rounded-xl px-5 py-2 hover:bg-slate-200"
+                            onClick={handleDeletePost}
+                          >
+                            Xoá
+                          </li>
+                        </ul>
+                      </div>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
             </div>
 
             {isEditing ? (
@@ -253,20 +259,20 @@ const Post = ({ post }) => {
                     onChange={handleMediaChange}
                     className="ml-2 cursor-pointer"
                   />
-              </div>
-                  <button
-                    onClick={handleEditPost}
-                    className="ml-3 rounded-xl bg-blue-500 px-3 py-1 text-white"
-                  >
-                    Lưu
-                  </button>
-                  <button
-                    onClick={() => setIsEditing(false)}
-                    className="ml-3 rounded-xl bg-red-500 px-3 py-1 text-white"
-                  >
-                    Hủy
-                  </button>
                 </div>
+                <button
+                  onClick={handleEditPost}
+                  className="ml-3 rounded-xl bg-blue-500 px-3 py-1 text-white"
+                >
+                  Lưu
+                </button>
+                <button
+                  onClick={() => setIsEditing(false)}
+                  className="ml-3 rounded-xl bg-red-500 px-3 py-1 text-white"
+                >
+                  Hủy
+                </button>
+              </div>
             ) : (
               <p className="mt-3 whitespace-pre-wrap">{post.content}</p>
             )}
