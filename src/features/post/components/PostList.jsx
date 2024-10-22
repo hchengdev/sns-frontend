@@ -7,15 +7,25 @@ import PostForm from './PostForm.jsx';
 const PostList = () => {
   const dispatch = useDispatch();
   const { posts, isLoading, error } = useSelector((state) => state.post);
-  const [updatedPosts, setUpdatedPosts] = useState(posts);
+  const [updatedPosts, setUpdatedPosts] = useState([]);
 
   useEffect(() => {
+    // Tải tất cả các bài đăng khi component được mount
     dispatch(getAllPosts());
   }, [dispatch]);
 
   useEffect(() => {
+    // Cập nhật state của updatedPosts khi posts thay đổi
     setUpdatedPosts(posts);
   }, [posts]);
+
+  // const addNewPost = (newPost) => {
+  //   // Thêm bài đăng mới vào đầu danh sách
+  //   setUpdatedPosts((prevPosts) => [newPost, ...prevPosts]);
+  // };
+  const sortedPosts = [...updatedPosts].sort((a, b) => {
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -32,7 +42,7 @@ const PostList = () => {
         <p>No posts available</p>
       ) : (
         <div>
-          {updatedPosts.map((post) => (
+          {sortedPosts.map((post) => (
             <Post key={post.id} post={post} />
           ))}
         </div>

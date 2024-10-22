@@ -4,8 +4,10 @@ import { createPost } from '../services/post';
 import { BsFillImageFill } from 'react-icons/bs';
 import { FaEarthAmericas, FaLock, FaUserGroup } from 'react-icons/fa6';
 
-const PostForm = () => {
+const PostForm = ({ addNewPost }) => {
   const dispatch = useDispatch();
+
+  // Lấy user từ Redux store
   const { user } = useSelector((state) => state.auth);
   const { isLoading } = useSelector((state) => state.post);
 
@@ -31,13 +33,20 @@ const PostForm = () => {
     setError(null);
 
     try {
-      await dispatch(createPost({
+      const newPost = await dispatch(createPost({
         content,
         userId: user.id,
         visibility,
         file: postImage,
+        createdBy: {
+          name: user.name,
+          profilePicture: user.profilePicture
+        }
       }));
 
+      addNewPost(newPost);
+
+      // Reset form after successful submission
       setContent('');
       setPostImage(null);
       setVisibility('PUBLIC');
@@ -55,11 +64,21 @@ const PostForm = () => {
     setDropdownOpen(false);
   };
 
+  const userProfileImg = user?.profilePicture
+    ? `/apihost/image/${user.profilePicture}`
+    : '/path/to/default/image.png';
+
+
+
   return (
     <div className="modal-class py-5">
       <div className="flex px-5 py-3 border border-l border-solid border-zinc-300 bg-white shadow-md rounded-lg">
         <div className="mt-3 h-12 w-12 flex-none text-lg">
-          <img src="/logo_img.png" className="h-12 w-12 flex-none rounded-full" alt="avatar" />
+          <img
+            src={userProfileImg}
+            className="h-12 w-12 flex-none cursor-pointer rounded-full object-cover"
+            alt="avatar"
+          />
         </div>
 
         <div className="w-full px-2">
@@ -92,7 +111,9 @@ const PostForm = () => {
                   {visibility === 'PUBLIC' && <FaEarthAmericas className="mr-2" />}
                   {visibility === 'PRIVATE' && <FaLock className="mr-2" />}
                   {visibility === 'FRIENDS' && <FaUserGroup className="mr-2" />}
-                  <span>{visibility === 'PUBLIC' ? 'Công khai' : visibility === 'PRIVATE' ? 'Riêng tư' : 'Bạn bè'}</span>
+                  <span>
+                    {visibility === 'PUBLIC' ? 'Công khai' : visibility === 'PRIVATE' ? 'Riêng tư' : 'Bạn bè'}
+                  </span>
                 </button>
               )}
 

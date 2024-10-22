@@ -1,29 +1,47 @@
-import React from 'react';
-import { List, Avatar } from 'antd'; // Chỉ import List và Avatar một lần
-import { useSelector } from 'react-redux';
-import { selectNotifications } from '../store/notificationsSlice';
+import React, { useEffect, useState } from 'react';
+import { fetchNotifications } from '../services/notifications.js'; // Nhập service
+import { List, Spin, Alert } from 'antd'; // Nhập các component cần thiết từ antd
 
-const NotificationsList = () => {
-  const notifications = useSelector(selectNotifications);
+const NotificationsList = ({ userId }) => { // Thêm userId như prop
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true); // Trạng thái loading
+  const [error, setError] = useState(null); // Trạng thái lỗi
 
-  // Kiểm tra nếu notifications không phải là mảng hoặc không có thông báo
-  if (!Array.isArray(notifications) || notifications.length === 0) {
-    return <div>No notifications available.</div>;
-  }
+  useEffect(() => {
+    const loadNotifications = async () => {
+      setLoading(true); // Bắt đầu loading
+      try {
+        const data = await fetchNotifications(userId); // Gọi service để lấy thông báo
+        setNotifications(data); // Cập nhật danh sách thông báo
+      } catch (err) {
+        setError(err); // Cập nhật lỗi nếu có
+      } finally {
+        setLoading(false); // Kết thúc loading
+      }
+    };
+
+    loadNotifications();
+  }, [userId]); // Chạy lại effect khi userId thay đổi
+
+  if (loading) return <Spin tip="Loading notifications..." />; // Hiển thị loading
+  if (error) return <Alert message="Error fetching notifications" description={error.message} type="error" />; // Hiển thị lỗi
 
   return (
-    <List
-      itemLayout="horizontal"
-      dataSource={notifications}
-      renderItem={(notification) => (
-        <List.Item>
-          <List.Item.Meta
-            avatar={<Avatar src={notification.avatar} />} // Giả sử bạn có trường avatar trong dữ liệu thông báo
-            title={notification.message}
-          />
-        </List.Item>
+    <div className="notifications-list">
+      {notifications.length === 0 ? (
+        <p>No notifications available</p>
+      ) : (
+        <List
+          bordered
+          dataSource={notifications}
+          renderItem={notification => (
+            <List.Item key={notification.id}>
+              {notification.message} {/* Giả sử thông báo có thuộc tính message */}
+            </List.Item>
+          )}
+        />
       )}
-    />
+    </div>
   );
 };
 
