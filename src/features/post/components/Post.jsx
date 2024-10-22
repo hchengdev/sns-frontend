@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deletePost, updatePost, toggleLikePost } from '../services/post';
 import { toast } from 'react-toastify';
-import CommentList from '../../comment/components/CommentList'; // Import CommentList
+import CommentList from '../../comment/components/CommentList';
 import { FaEarthAmericas, FaLock, FaUserGroup } from 'react-icons/fa6';
 import { Carousel, Tooltip } from 'antd';
 import CommentForm from '../../comment/components/CommentForm.jsx';
@@ -16,11 +16,11 @@ const Post = ({ post }) => {
   const [visibility, setVisibility] = useState(post.visibility);
   const [media, setMedia] = useState([]);
   const { user } = useSelector((state) => state.auth);
-  const userId = user ? user.id : null; // Move this line up
+  const userId = user ? user.id : null;
   const [likeState, setLikeState] = useState({
     isLiked: post.likes?.likeByUsers?.includes(userId) || false,
     likeCount: post.likes?.likeCount || 0,
-    likedByUsers: post.likes?.likeByUsers || [],
+    likedByUsers: post.likes?.likeByUsers || []
   });
   const [comments, setComments] = useState(post.comments || []);
   const [showComments, setShowComments] = useState({});
@@ -28,28 +28,28 @@ const Post = ({ post }) => {
 
   useEffect(() => {
     setContent(post.content);
+    setVisibility(post.visibility);
     setLikeState({
       isLiked: post.likes?.likeByUsers?.includes(userId) || false,
       likeCount: post.likes?.likeCount || 0,
-      likedByUsers: post.likes?.likeByUsers || [],
+      likedByUsers: post.likes?.likeByUsers || []
     });
   }, [post, userId]);
 
-
   const handleLike = async () => {
-    const { isLike } = likeState;
+    const { isLiked } = likeState; // sửa lỗi: dùng biến isLiked thay vì isLike
     try {
       const response = await dispatch(toggleLikePost(post.id)).unwrap();
       if (response && response.likeCount !== undefined) {
         setLikeState(prev => ({
           ...prev,
-          isLiked: !isLike,
+          isLiked: !isLiked,
           likeCount: response.likeCount,
-          likedByUsers: response.likedByUsers || [],
+          likedByUsers: response.likedByUsers || []
         }));
         const likedPost = JSON.parse(localStorage.getItem('likedPosts')) || {};
-        likedPost[post.id] = !isLike;
-        localStorage.setItem('likePosts', JSON.stringify(likedPost));
+        likedPost[post.id] = !isLiked;
+        localStorage.setItem('likedPosts', JSON.stringify(likedPost)); // sửa tên key là likedPosts
       } else {
         throw new Error('LikeCount không có trong phản hồi');
       }
@@ -59,10 +59,12 @@ const Post = ({ post }) => {
     }
   };
 
-
-
+  const userProfileImg = post.createdBy?.profilePicture
+    ? `/apihost/image/${post.createdBy.profilePicture}`
+    : '/path/to/default/image.png';
 
   const toggleOptions = () => setShowOptions((prev) => !prev);
+
 
   const toggleComments = (postId) => {
     setShowComments((prev) => ({
@@ -119,7 +121,8 @@ const Post = ({ post }) => {
     );
   };
 
-  if (post.visibility === 'PRIVATE' && post.userId !== user.id) {
+  // Kiểm tra quyền truy cập
+  if (post.visibility === 'PRIVATE' && post.userId !== userId) {
     return null;
   }
 
@@ -130,7 +133,6 @@ const Post = ({ post }) => {
 
   const handleCommentSubmit = (postId, newComment) => {
     setComments((prevComments) => [...prevComments, newComment]);
-
   };
 
   const renderMedia = () => (
@@ -159,18 +161,21 @@ const Post = ({ post }) => {
         </span>
       </Tooltip>
     );
-  }
+  };
 
-
+  const parseDateString = (dateString) => {
+    const [time, date] = dateString.split(' ');
+    const [day, month, year] = date.split('/').map(Number);
+    return new Date(year, month - 1, day, ...time.split(':').map(Number));
+  };
 
   return (
     <div className="pb-5">
-      <div
-        className="border rounded-xl overflow-hidden border-l border-solid border-zinc-300 bg-white shadow-md rounded-lg">
+      <div className="border rounded-xl overflow-hidden border-l border-solid border-zinc-300 bg-white shadow-md rounded-lg">
         <div className="ml-0 flex py-3 pl-2 pr-1 sm:mr-0 sm:px-5 sm:pr-0">
           <div className="mt-3 h-12 w-12 flex-none text-lg">
             <img
-              src="/logo_img.png"
+              src={userProfileImg}
               className="h-12 w-12 flex-none cursor-pointer rounded-full object-cover"
               alt="avatar"
             />
@@ -179,11 +184,19 @@ const Post = ({ post }) => {
           <div className="w-full px-4 py-3">
             <div className="relative flex w-full justify-between">
               <h2 className="cursor-pointer font-semibold flex items-center">
-                <span className="pl-1.5 font-normal text-slate-500">User {post.userId}</span>
+                <span className="pl-1.5 font-normal text-slate-500">
+                  {post.createdBy.name}
+                </span>
+
                 <span className="ml-2 text-sm text-gray-500 flex items-center">
                   {getVisibilityText(post.visibility)}
                 </span>
               </h2>
+              <span className="text-xs text-gray-400 ml-2">
+              {parseDateString(post.createdAt).toLocaleString()} {/* Hiển thị thời gian */}
+            </span>
+              {/*<p className="text-sm text-gray-600">{formatDate(post.createdAt) || 'Unknown Date'}</p>*/}
+
               {post.userId === userId && (
                 <>
                   <HiDotsHorizontal className="mr-3 cursor-pointer" onClick={toggleOptions} />
@@ -213,7 +226,6 @@ const Post = ({ post }) => {
               )}
             </div>
 
-
             {isEditing ? (
               <div>
                 <textarea
@@ -227,63 +239,68 @@ const Post = ({ post }) => {
                   <select
                     value={visibility}
                     onChange={(e) => setVisibility(e.target.value)}
-                    className="ml-0.5 mr-2 rounded bg-slate-200 px-2 py-1 text-slate-600"
+                    className="ml-0.5 mr-2 rounded bg-slate-200 px-2 py-1 text-gray-700"
                   >
-                    <option value="PRIVATE">Riêng tư</option>
-                    <option value="FRIENDS_ONLY">Bạn bè</option>
                     <option value="PUBLIC">Công khai</option>
+                    <option value="FRIENDS_ONLY">Bạn bè</option>
+                    <option value="PRIVATE">Riêng tư</option>
                   </select>
                 </div>
                 <div className="flex mt-2">
-                  <input type="file" onChange={handleMediaChange} multiple />
+                  <input
+                    type="file"
+                    multiple
+                    onChange={handleMediaChange}
+                    className="ml-2 cursor-pointer"
+                  />
+              </div>
+                  <button
+                    onClick={handleEditPost}
+                    className="ml-3 rounded-xl bg-blue-500 px-3 py-1 text-white"
+                  >
+                    Lưu
+                  </button>
+                  <button
+                    onClick={() => setIsEditing(false)}
+                    className="ml-3 rounded-xl bg-red-500 px-3 py-1 text-white"
+                  >
+                    Hủy
+                  </button>
                 </div>
-                <button
-                  className="mt-3 rounded bg-blue-500 py-1 px-3 text-white hover:bg-blue-600"
-                  onClick={handleEditPost}
-                >
-                  Cập nhật bài viết
-                </button>
-                <button
-                  className="mt-3 ml-2 rounded bg-red-500 py-1 px-3 text-white hover:bg-red-600"
-                  onClick={() => setIsEditing(false)}
-                >
-                  Hủy
-                </button>
-              </div>
             ) : (
-              <p className="max-w-lg cursor-pointer break-words py-3">
-                {post.content}
-              </p>
+              <p className="mt-3 whitespace-pre-wrap">{post.content}</p>
             )}
-          </div>
-        </div>
 
-        {post.media && post.media.length > 0 && renderMedia()}
+            {post.media && post.media.length > 0 && renderMedia()}
 
-        <div className="ml-0 flex  py-3 pl-2 pr-1 sm:mr-0 sm:px-5 sm:pr-0">
-          <p className="text-sm text-gray-600">{post.createdAt || 'Unknown Date'}</p>
-        </div>
+            {/*<div className="ml-0 flex  py-3 pl-2 pr-1 sm:mr-0 sm:px-5 sm:pr-0">*/}
+            {/*  <p className="text-sm text-gray-600">{post.createdAt || 'Unknown Date'}</p>*/}
+            {/*</div>*/}
 
-        <div className="px-5 pb-5">
-          <div>
-            <form className="flex items-center justify-between mt-3">
-              <div className="flex items-center">
-                {renderLike(post)}
-                <CommentOutlined className="ml-4 cursor-pointer" onClick={() => toggleComments(post.id)} />
-                <span className="ml-2">{comments.length}</span>
+            <div className="px-5 pb-5">
+              <div>
+                {/* Combined Like and Comment Section */}
+                <form className="flex items-center justify-between mt-3">
+                  <div className="flex items-center">
+                    {renderLike(post)}
+                    <CommentOutlined className="ml-4 cursor-pointer" onClick={() => toggleComments(post.id)} />
+                    <span className="ml-2">{comments.length} bình luận</span> {/* Hiển thị tổng số bình luận */}
+                  </div>
+                </form>
               </div>
-            </form>
-          </div>
-          {showComments[post.id] && (
-            <div className="mt-4">
-              <CommentList comments={comments} />
-              <CommentForm
-                postId={post.id}
-                userId={userId}
-                onCommentAdded={handleCommentSubmit}
-              />
+              {/* Render Comment List when clicked */}
+              {showComments[post.id] && (
+                <div className="mt-4">
+                  <CommentList comments={comments} />
+                  <CommentForm
+                    postId={post.id}
+                    userId={userId}
+                    onCommentAdded={handleCommentSubmit}
+                  />
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

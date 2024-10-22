@@ -9,6 +9,8 @@ import NavBar from '../../../components/NavBar.jsx';
 const SearchForm = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const dispatch = useDispatch();
+
+  // Lấy dữ liệu từ Redux store
   const { posts = [], searchResults = [], isLoading, error } = useSelector((state) => state.post);
 
   useEffect(() => {
@@ -18,7 +20,23 @@ const SearchForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Từ khóa tìm kiếm:', searchQuery);
-    dispatch(searchPosts(searchQuery));
+    if (searchQuery) {
+      dispatch(searchPosts(searchQuery));
+    }
+  };
+
+  const renderPosts = () => {
+    if (searchQuery) {
+      if (searchResults.length > 0) {
+        return searchResults.map((post) => <Post key={post.id} post={post} />);
+      } else {
+        return <p>Không tìm thấy bài viết nào với từ khóa &quot;{searchQuery}&quot;</p>;
+      }
+    } else if (posts.length > 0) {
+      return posts.map((post) => <Post key={post.id} post={post} />);
+    } else {
+      return <p>Không có bài viết nào</p>;
+    }
   };
 
   if (isLoading) {
@@ -36,7 +54,7 @@ const SearchForm = () => {
       </div>
       <div className="flex flex-col overflow-hidden h-[100vh] mx-5 border-solid border-l-zinc-400 bg-[#fff] px-[20px] py-[5px] w-[50%]">
         <div className="flex-1 overflow-y-auto hide-scrollbar">
-          <form onSubmit={handleSubmit} method="post" className="flex justify-center items-center pt-20">
+          <form onSubmit={handleSubmit} className="flex justify-center items-center pt-20">
             <div className="relative w-[40%]">
               <input
                 type="text"
@@ -55,17 +73,7 @@ const SearchForm = () => {
           </form>
 
           <div className="mt-5 posts-container">
-            {searchResults.length > 0 ? (
-              searchResults.map((post) => (
-                <Post key={post.id} post={post} />
-              ))
-            ) : (
-              posts.length > 0 ? (
-                posts.map((post) => <Post key={post.id} post={post} />)
-              ) : (
-                <p>No posts available</p>
-              )
-            )}
+            {renderPosts()}
           </div>
         </div>
       </div>

@@ -10,14 +10,15 @@ const CommentList = ({ comments, onUpdate }) => {
     setUpdatedComments(comments);
   }, [comments]);
 
+
   return (
     <List
       itemLayout="horizontal"
       dataSource={updatedComments}
       renderItem={comment => {
         const avatarSrc = comment.createdBy?.profilePicture
-          ? `http://localhost:3002${comment.createdBy.profilePicture}`
-          : '/default-avatar.png';
+          ? `/apihost/image/${comment.createdBy.profilePicture}`
+          : '/path/to/default/image.png';
 
         return (
           <List.Item>

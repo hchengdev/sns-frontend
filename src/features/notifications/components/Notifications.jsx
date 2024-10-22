@@ -11,7 +11,9 @@ const Notifications = ({ userId }) => {
   const error = useSelector(selectError);
 
   useEffect(() => {
-    dispatch(getNotifications(userId)); // Gọi hàm để lấy thông báo
+    if (userId) {
+      dispatch(getNotifications(userId)); // Gọi hàm để lấy thông báo
+    }
   }, [dispatch, userId]);
 
   const handleMarkAllAsRead = () => {
@@ -24,7 +26,11 @@ const Notifications = ({ userId }) => {
   return (
     <div>
       <h1>Thông Báo của Bạn</h1>
-      <button onClick={handleMarkAllAsRead}>Đánh dấu tất cả là đã đọc</button>
+      {notifications.length === 0 ? (
+        <div>Không có thông báo nào.</div>
+      ) : (
+        <button onClick={handleMarkAllAsRead}>Đánh dấu tất cả là đã đọc</button>
+      )}
       <NotificationsList notifications={notifications} />
     </div>
   );
