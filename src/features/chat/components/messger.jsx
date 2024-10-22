@@ -14,7 +14,14 @@ import {
     removeMemberFromGroup
 } from '../services/messager';
 import { Button } from 'antd';
-import { DeleteOutlined, UserAddOutlined, UsergroupAddOutlined, MessageOutlined, TeamOutlined, SmileOutlined } from '@ant-design/icons';
+import {
+    DeleteOutlined,
+    UserAddOutlined,
+    UsergroupAddOutlined,
+    MessageOutlined,
+    TeamOutlined,
+    SmileOutlined
+} from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
 const socket = io('http://localhost:8089');
@@ -54,6 +61,8 @@ const ChatApp = () => {
     const [messageInfoVisible, setMessageInfoVisible] = useState(null);
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
+    const [filteredUsers, setFilteredUsers] = useState([]);
+    const [showFilteredUsers, setShowFilteredUsers] = useState(false);
     const emojis = ['😀', '😂', '😍', '😎', '😢', '😡', '👍', '🎉', '❤️', '🙌'];
 
     const messagesEndRef = useRef(null);
@@ -73,7 +82,19 @@ const ChatApp = () => {
 
         const messageListener = (message) => {
             if (message.sender.id !== userId) {
-                setMessages(prevMessages => [...prevMessages, message]);
+                const timestamp = new Date(message.timestamp);
+                const newMessage = {
+                    ...message,
+                    timestamp: [
+                        timestamp.getFullYear(),
+                        timestamp.getMonth() + 1,
+                        timestamp.getDate(),
+                        timestamp.getHours(),
+                        timestamp.getMinutes(),
+                        timestamp.getSeconds(),
+                    ],
+                };
+                setMessages(prevMessages => [...prevMessages, newMessage]);
             }
         };
 
@@ -126,7 +147,7 @@ const ChatApp = () => {
         const newMessage = {
             content: messageContent,
             sender: { id: userId, name: usersMap[userId] },
-            timestamp: new Date(),
+            timestamp: new Date().toISOString(),
         };
 
         setMessages(prevMessages => [...prevMessages, newMessage]);
@@ -134,6 +155,7 @@ const ChatApp = () => {
         await sendMessages(socketInstance, messageContent, selectedGroupId, userId);
 
         setMessageContent('');
+        setShowFilteredUsers(false);
     };
 
     const createNewGroup = async () => {
@@ -211,7 +233,6 @@ const ChatApp = () => {
         setEmojiPickerVisible(false);
     };
 
-    // Hàm rời khỏi nhóm
     const leaveCurrentGroup = async () => {
         if (!selectedGroupId || !userId) return alert('Bạn không thể rời khỏi nhóm này.');
 
@@ -219,17 +240,38 @@ const ChatApp = () => {
             await removeMemberFromGroup(selectedGroupId, userId);
             alert('Bạn đã rời khỏi nhóm.');
             setSelectedGroupId(null);
-            setMessages([]); // Xóa tin nhắn đã tải cho nhóm này
-            await loadUserGroupsData(); // Tải lại danh sách nhóm
+            setMessages([]);
+            await loadUserGroupsData();
         } catch (error) {
             alert('Có lỗi xảy ra khi rời nhóm.');
         }
     };
 
+    const handleInputChange = (e) => {
+        const value = e.target.value;
+        setMessageContent(value);
+
+        if (value.includes('@')) {
+            const mention = value.split('@').pop();
+            const members = userGroups.find(group => group.id === selectedGroupId)?.members || [];
+            const filtered = members.filter(member => member.name.toLowerCase().includes(mention.toLowerCase()));
+            setFilteredUsers(filtered);
+            setShowFilteredUsers(filtered.length > 0);
+        } else {
+            setShowFilteredUsers(false);
+        }
+    };
+
+    const tagUser = (user) => {
+        const newMessageContent = messageContent.replace(/@[^ ]*$/, `@${user.name} `);
+        setMessageContent(newMessageContent);
+        setShowFilteredUsers(false);
+    };
+
     return (
         <div className="flex flex-col h-screen bg-gray-50" style={{ height: '46rem' }}>
-            <header className="bg-blue-600 text-white p-4 text-center text-2xl font-bold shadow-md" style={{ marginTop: '4rem' }}>
-                <MessageOutlined /> Group Chat
+            <header className="bg-blue-600 text-white p-4 text-center text-2xl font-bold shadow-md flex items-center justify-between">
+                <MessageOutlined /> <span>Group Chat</span> <UsergroupAddOutlined />
             </header>
             <div className="flex flex-grow">
                 {/* Left Side: Create Group and User List */}
@@ -240,25 +282,24 @@ const ChatApp = () => {
                         placeholder="Group name..."
                         value={groupName}
                         onChange={(e) => setGroupName(e.target.value)}
-                        className="border border-gray-300 p-2 rounded-lg w-full mb-2"
+                        className="border border-gray-300 p-2 rounded-lg w-full mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    <button onClick={createNewGroup} className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-700 transition duration-300 w-full">
-                        Create Group
-                    </button>
+                    <Button onClick={createNewGroup} className="bg-green-600 text-white w-full" icon={<UsergroupAddOutlined />} >
+                        Create
+                    </Button>
                     <span className="ml-2">Members: {memberCount}</span>
                     <h3 className="font-bold text-lg mt-4">Members in Group:</h3>
-                    <button onClick={toggleMemberList} className="bg-blue-600 text-white p-2 rounded-lg mb-2 hover:bg-blue-700 transition duration-300 w-full">
+                    <Button onClick={toggleMemberList} className="bg-blue-600 text-white w-full mb-2" icon={showMemberList ? <UsergroupAddOutlined /> : <UserAddOutlined />}>
                         {showMemberList ? 'Hide Members' : 'Show Members'}
-                    </button>
+                    </Button>
                     {showMemberList && (
                         <div className="mb-4">
                             {userGroups.find(group => group.id === selectedGroupId)?.members.map(member => (
-                                <div key={member.id} className="flex items-center p-2 border-b border-gray-200">
+                                <div key={member.id} className="flex items-center p-2 border-b border-gray-200 cursor-pointer" onClick={() => selectUser1(member)}>
                                     <img
                                         src={member.profilePicture ? `/apihost/image/${member.profilePicture}` : DEFAULT_PROFILE_PIC}
-                                        className="w-10 h-10 rounded-full"
+                                        className="w-8 h-8 rounded-full"
                                         alt={member.name || 'Unknown Member'}
-                                        onClick={() => selectUser1(member)}
                                     />
                                     <span className="ml-2">{member.name || 'Unknown Member'}</span>
                                 </div>
@@ -266,9 +307,9 @@ const ChatApp = () => {
                         </div>
                     )}
                     <h3 className="font-bold text-lg mb-2"><UserAddOutlined /> Add Member:</h3>
-                    <button onClick={toggleUserList} className="bg-blue-600 text-white p-2 rounded-lg mb-2 hover:bg-blue-700 transition duration-300 w-full">
+                    <Button onClick={toggleUserList} className="bg-blue-600 text-white w-full mb-2" icon={<UserAddOutlined />}>
                         Toggle User List
-                    </button>
+                    </Button>
                     {showUserList && (
                         <ul className="list-none max-h-40 overflow-y-auto border border-gray-300 p-2 mb-2 rounded-lg">
                             {userList.map(user => (
@@ -279,7 +320,7 @@ const ChatApp = () => {
                                 >
                                     <img
                                         src={user.profilePicture ? `/apihost/image/${user.profilePicture}` : DEFAULT_PROFILE_PIC}
-                                        className="w-10 h-10 rounded-full"
+                                        className="w-8 h-8 rounded-full"
                                         alt={user.name || 'Unknown Member'}
                                     />
                                     {user.name}
@@ -290,11 +331,12 @@ const ChatApp = () => {
                     <div className="mt-2">
                         <strong>Selected Users:</strong> {selectedUsers.map(user => user.name).join(', ')}
                     </div>
-                    <button onClick={addMember} className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300 mt-2">Confirm Add</button>
-
+                    <Button onClick={addMember} className="bg-blue-600 text-white w-full mt-2" icon={<UserAddOutlined />}>
+                        Confirm Add
+                    </Button>
                 </div>
 
-                <div className="flex-grow p-4 flex flex-col">
+                <div className="flex-grow p-4 flex flex-col relative">
                     <div className="text-xl font-bold mb-4">
                         {selectedGroupId && userGroups.find(group => group.id === selectedGroupId)?.name}
                     </div>
@@ -306,7 +348,15 @@ const ChatApp = () => {
                                     {messageInfoVisible === msg.id && (
                                         <div className="flex items-center mt-1 text-black">
                                             <span className="text-gray-500 text-xs">
-                                                {new Date(msg.timestamp).toLocaleTimeString()}
+                                                {Array.isArray(msg.timestamp) && msg.timestamp.length === 6
+                                                    ? new Date(...msg.timestamp).toLocaleString([], {
+                                                        year: 'numeric',
+                                                        month: '2-digit',
+                                                        day: '2-digit',
+                                                        hour: '2-digit',
+                                                        minute: '2-digit'
+                                                    })
+                                                    : 'Invalid timestamp'}
                                             </span>
                                             {msg.sender.id === userId && (
                                                 <Button
@@ -326,6 +376,7 @@ const ChatApp = () => {
                         ))}
                         <div ref={messagesEndRef} />
                     </div>
+
                     <div className="flex items-center mb-2">
                         <button onClick={() => setEmojiPickerVisible(!emojiPickerVisible)} className="text-gray-600 hover:text-blue-600 mr-2">
                             <SmileOutlined />
@@ -345,11 +396,22 @@ const ChatApp = () => {
                             type="text"
                             placeholder="Type a message..."
                             value={messageContent}
-                            onChange={(e) => setMessageContent(e.target.value)}
+                            onChange={handleInputChange}
                             className="flex-grow p-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
-                        <button onClick={sendMessage} className="bg-blue-600 text-white p-2 rounded-r-lg hover:bg-blue-700 transition duration-300">Send</button>
+                        <Button onClick={sendMessage} className="bg-blue-600 text-white rounded-r-lg" icon={<MessageOutlined />}>
+                            Send
+                        </Button>
                     </div>
+                    {showFilteredUsers && (
+                        <ul className="absolute z-10 bg-white border border-gray-300 rounded-lg shadow-lg mt-1 max-h-40 overflow-y-auto">
+                            {filteredUsers.map(user => (
+                                <li key={user.id} className="p-2 cursor-pointer hover:bg-blue-100" onClick={() => tagUser(user)}>
+                                    {user.name}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
 
                 <aside className="w-1/4 p-4 border-l border-gray-300 bg-white shadow-lg">
@@ -362,15 +424,15 @@ const ChatApp = () => {
                                 onClick={() => selectGroup(group.id)}
                             >
                                 <div className="flex items-center">
-                                    <UsergroupAddOutlined className="text-blue-600 mr-2" style={{ fontSize: '24px' }} />
+                                    <UsergroupAddOutlined className="text-blue-600 mr-2" style={{ fontSize: '20px' }} />
                                     <span className="ml-2">{group.name}</span>
                                 </div>
                             </li>
                         ))}
                     </ul>
-                    <button onClick={leaveCurrentGroup} className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition duration-300 mt-2">
-                        Rời khỏi nhóm
-                    </button>
+                    <Button onClick={leaveCurrentGroup} className="bg-red-600 text-white w-full mt-2" icon={<UsergroupAddOutlined />}>
+                        Leave Group
+                    </Button>
                 </aside>
             </div>
         </div>

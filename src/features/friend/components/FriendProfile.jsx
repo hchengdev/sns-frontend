@@ -26,7 +26,7 @@ const FriendProfile = () => {
   const [user, setUser] = useState({
     name: '',
     email: '',
-    profile_picture: '',
+    profilePicture: '',
     biography: '',
   });
   const [suggestionList, setSuggestionList] = useState([]);
@@ -89,12 +89,12 @@ const FriendProfile = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { name, email, profile_picture, biography } = await getUsersById({
+        const { name, email, profilePicture, biography } = await getUsersById({
           id,
         });
 
         setUser({
-          profile_picture,
+          profilePicture,
           name,
           biography,
           email,
@@ -176,7 +176,7 @@ const FriendProfile = () => {
                   : ''
               }
               className="h-32 w-32 rounded-full object-cover"
-              alt="profile_picture"
+              alt="profilePicture"
             />
             <div className="ml-8">
               <h2 className="mb-1 ml-1 font-semibold">{user.name}</h2>
