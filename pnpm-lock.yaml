@@ -11,6 +11,15 @@ importers:
       '@cometchat/chat-uikit-react':
         specifier: ^4.3.21
         version: 4.3.21(@cometchat/chat-sdk-javascript@4.0.10)(@cometchat/uikit-elements@4.3.16(@babel/core@7.25.2)(@cometchat/chat-sdk-javascript@4.0.10)(@cometchat/uikit-resources@4.3.12)(babel-jest@27.5.1(@babel/core@7.25.2)))(@cometchat/uikit-resources@4.3.12(@babel/core@7.25.2)(@cometchat/chat-sdk-javascript@4.0.10)(@cometchat/uikit-shared@4.3.18)(babel-jest@27.5.1(@babel/core@7.25.2)))(@cometchat/uikit-shared@4.3.18(@babel/core@7.25.2)(@cometchat/chat-sdk-javascript@4.0.10)(@cometchat/uikit-elements@4.3.16)(@cometchat/uikit-resources@4.3.12)(babel-jest@27.5.1(@babel/core@7.25.2)))
+      '@cometchat/uikit-elements':
+        specifier: ^4.3.16
+        version: 4.3.16(@babel/core@7.25.2)(@cometchat/chat-sdk-javascript@4.0.10)(@cometchat/uikit-resources@4.3.12)(babel-jest@27.5.1(@babel/core@7.25.2))
+      '@cometchat/uikit-resources':
+        specifier: ^4.3.12
+        version: 4.3.12(@babel/core@7.25.2)(@cometchat/chat-sdk-javascript@4.0.10)(@cometchat/uikit-shared@4.3.18)(babel-jest@27.5.1(@babel/core@7.25.2))
+      '@cometchat/uikit-shared':
+        specifier: ^4.3.18
+        version: 4.3.18(@babel/core@7.25.2)(@cometchat/chat-sdk-javascript@4.0.10)(@cometchat/uikit-elements@4.3.16)(@cometchat/uikit-resources@4.3.12)(babel-jest@27.5.1(@babel/core@7.25.2))
       '@fortawesome/free-brands-svg-icons':
         specifier: ^6.6.0
         version: 6.6.0
@@ -76,7 +85,7 @@ importers:
         version: 1.8.1(jquery@3.7.1)
       sns-frontend:
         specifier: 'file:'
-        version: file:(@cometchat/chat-sdk-javascript@4.0.10)(@cometchat/uikit-elements@4.3.16(@babel/core@7.25.2)(@cometchat/chat-sdk-javascript@4.0.10)(@cometchat/uikit-resources@4.3.12)(babel-jest@27.5.1(@babel/core@7.25.2)))(@cometchat/uikit-resources@4.3.12(@babel/core@7.25.2)(@cometchat/chat-sdk-javascript@4.0.10)(@cometchat/uikit-shared@4.3.18)(babel-jest@27.5.1(@babel/core@7.25.2)))(@cometchat/uikit-shared@4.3.18(@babel/core@7.25.2)(@cometchat/chat-sdk-javascript@4.0.10)(@cometchat/uikit-elements@4.3.16)(@cometchat/uikit-resources@4.3.12)(babel-jest@27.5.1(@babel/core@7.25.2)))(@fortawesome/fontawesome-svg-core@6.6.0)(@types/react@18.3.10)(date-fns@3.6.0)(jquery@3.7.1)(redux@5.0.1)
+        version: file:(@babel/core@7.25.2)(@cometchat/chat-sdk-javascript@4.0.10)(@fortawesome/fontawesome-svg-core@6.6.0)(@types/react@18.3.10)(babel-jest@27.5.1(@babel/core@7.25.2))(date-fns@3.6.0)(jquery@3.7.1)(redux@5.0.1)
       tailwind-scrollbar-hide:
         specifier: ^1.1.7
         version: 1.1.7
@@ -9663,9 +9672,12 @@ snapshots:
     dependencies:
       jquery: 3.7.1
 
-  sns-frontend@file:(@cometchat/chat-sdk-javascript@4.0.10)(@cometchat/uikit-elements@4.3.16(@babel/core@7.25.2)(@cometchat/chat-sdk-javascript@4.0.10)(@cometchat/uikit-resources@4.3.12)(babel-jest@27.5.1(@babel/core@7.25.2)))(@cometchat/uikit-resources@4.3.12(@babel/core@7.25.2)(@cometchat/chat-sdk-javascript@4.0.10)(@cometchat/uikit-shared@4.3.18)(babel-jest@27.5.1(@babel/core@7.25.2)))(@cometchat/uikit-shared@4.3.18(@babel/core@7.25.2)(@cometchat/chat-sdk-javascript@4.0.10)(@cometchat/uikit-elements@4.3.16)(@cometchat/uikit-resources@4.3.12)(babel-jest@27.5.1(@babel/core@7.25.2)))(@fortawesome/fontawesome-svg-core@6.6.0)(@types/react@18.3.10)(date-fns@3.6.0)(jquery@3.7.1)(redux@5.0.1):
+  sns-frontend@file:(@babel/core@7.25.2)(@cometchat/chat-sdk-javascript@4.0.10)(@fortawesome/fontawesome-svg-core@6.6.0)(@types/react@18.3.10)(babel-jest@27.5.1(@babel/core@7.25.2))(date-fns@3.6.0)(jquery@3.7.1)(redux@5.0.1):
     dependencies:
       '@cometchat/chat-uikit-react': 4.3.21(@cometchat/chat-sdk-javascript@4.0.10)(@cometchat/uikit-elements@4.3.16(@babel/core@7.25.2)(@cometchat/chat-sdk-javascript@4.0.10)(@cometchat/uikit-resources@4.3.12)(babel-jest@27.5.1(@babel/core@7.25.2)))(@cometchat/uikit-resources@4.3.12(@babel/core@7.25.2)(@cometchat/chat-sdk-javascript@4.0.10)(@cometchat/uikit-shared@4.3.18)(babel-jest@27.5.1(@babel/core@7.25.2)))(@cometchat/uikit-shared@4.3.18(@babel/core@7.25.2)(@cometchat/chat-sdk-javascript@4.0.10)(@cometchat/uikit-elements@4.3.16)(@cometchat/uikit-resources@4.3.12)(babel-jest@27.5.1(@babel/core@7.25.2)))
+      '@cometchat/uikit-elements': 4.3.16(@babel/core@7.25.2)(@cometchat/chat-sdk-javascript@4.0.10)(@cometchat/uikit-resources@4.3.12)(babel-jest@27.5.1(@babel/core@7.25.2))
+      '@cometchat/uikit-resources': 4.3.12(@babel/core@7.25.2)(@cometchat/chat-sdk-javascript@4.0.10)(@cometchat/uikit-shared@4.3.18)(babel-jest@27.5.1(@babel/core@7.25.2))
+      '@cometchat/uikit-shared': 4.3.18(@babel/core@7.25.2)(@cometchat/chat-sdk-javascript@4.0.10)(@cometchat/uikit-elements@4.3.16)(@cometchat/uikit-resources@4.3.12)(babel-jest@27.5.1(@babel/core@7.25.2))
       '@fortawesome/free-brands-svg-icons': 6.6.0
       '@fortawesome/free-regular-svg-icons': 6.6.0
       '@fortawesome/free-solid-svg-icons': 6.6.0
@@ -9691,18 +9703,24 @@ snapshots:
       use-debounce: 10.0.4(react@18.3.1)
       yup: 1.4.0
     transitivePeerDependencies:
+      - '@babel/core'
       - '@cometchat/chat-sdk-javascript'
-      - '@cometchat/uikit-elements'
-      - '@cometchat/uikit-resources'
-      - '@cometchat/uikit-shared'
       - '@fortawesome/fontawesome-svg-core'
       - '@types/react'
+      - babel-jest
+      - bufferutil
+      - canvas
       - date-fns
       - debug
+      - esbuild
       - jquery
       - luxon
       - moment
+      - node-notifier
       - redux
+      - supports-color
+      - ts-node
+      - utf-8-validate
 
   sort-on@6.1.0:
     dependencies:
