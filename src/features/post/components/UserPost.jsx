@@ -2,19 +2,13 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllPosts } from '../services/post';
 import Post from './Post';
-import PostForm from "./PostForm.jsx";
+import PostForm from './PostForm.jsx';
 
 const UserPost = () => {
   const dispatch = useDispatch();
-
-
   const { posts, isLoading, error } = useSelector((state) => state.post);
-
   const user = JSON.parse(localStorage.getItem('sns_user'));
   const userId = user ? user.id : null;
-
-  console.log('User ID:', userId);
-  console.log('Posts in UserPost component:', posts);
 
   useEffect(() => {
     dispatch(getAllPosts());
@@ -35,17 +29,14 @@ const UserPost = () => {
   }
 
   return (
+    <div>
+      <PostForm />
       <div>
-        <div>
-          <PostForm/>
-        </div>
-        <div>
-          {userPosts.map((post) => (
-              <Post key={post.id} post={post}/>
-          ))}
-        </div>
+        {userPosts.map((post) => (
+          <Post key={post.id} post={post} />
+        ))}
       </div>
-
+    </div>
   );
 };
 

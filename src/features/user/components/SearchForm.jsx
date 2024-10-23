@@ -4,14 +4,14 @@ import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getUserByName } from '../services/user';
-import { mutualFriends } from '../../../features/friend/services/friend';
+import { mutualFriends } from '../../friend/services/friend.js';
 import { getUserFromLocalStorage } from '../../../utils/axiosClient';
 import { clearListUser } from '../store/userSlice';
 
 const SearchForm = () => {
   const dispatch = useDispatch();
-  const { listUser, mutualFriendsList, isLoading } = useSelector(
-    (state) => state.user,
+  const { listUser, mutualFriendsList } = useSelector(
+    (state) => state.user
   );
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -91,7 +91,7 @@ const SearchForm = () => {
                   <Link to={`/me`}>
                     <div className="ml-5 flex items-center">
                       <img
-                        src={user.profilePicture}
+                        src={`/apihost/image/${user.profilePicture}`}
                         alt={user.name}
                         className="mr-2 h-[40px] w-[40px] rounded-full"
                       />
@@ -107,7 +107,7 @@ const SearchForm = () => {
                   <Link to={`/users/${user.id}`}>
                     <div className="ml-5 flex items-center">
                       <img
-                        src={user.profilePicture}
+                        src={`/apihost/image/${user.profilePicture}`}
                         alt={user.name}
                         className="mr-2 h-[40px] w-[40px] rounded-full"
                       />
