@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react'; // Nhập khẩu useEffect
 import { login } from '../services/auth';
 import Footer from '../../../components/Footer';
 import { Link, useNavigate } from 'react-router-dom';
@@ -7,42 +6,24 @@ import { object, string } from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { CometChat } from '@cometchat-pro/chat';
+import { useEffect } from 'react';
 
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.auth);
-  const authKey = '09bb9cb5972fb724637f56a3f40175cfd9c737fc';
 
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/');
     }
-  }, [isAuthenticated, navigate]); // Thêm navigate vào mảng phụ thuộc
-
-  useEffect(() => {
-    const appId = '2659213675dbee2c';
-    const appSettings = new CometChat.AppSettingsBuilder()
-      .subscribePresenceForAllUsers()
-      .setRegion('us')
-      .build();
-
-    CometChat.init(appId, appSettings).then(
-      () => {
-        console.log('Initialization completed successfully');
-      },
-      (error) => {
-        console.log('Initialization failed with error:', error);
-      },
-    );
-  }, []); // Thay đổi mảng phụ thuộc thành rỗng
+  }, [isAuthenticated]);
 
   const loginSchema = object({
     email: string().email('Email không hợp lệ').required('Vui lòng nhập email'),
     password: string()
       .min(6, 'Mật khẩu phải có ít nhất 6 ký tự')
-      .max(32, 'Mật khẩu tối đa 32 ký tự')
+      .max(32, 'Mật khẩu tối đã 32 ký tự')
       .required('Vui lòng nhập mật khẩu'),
   });
 
@@ -52,18 +33,6 @@ export default function Login() {
     onSubmit: async (values) => {
       try {
         dispatch(login(values));
-        const uid = values.email.replace(/[@.]/g, '_');
-
-        if (uid) {
-          CometChat.login(uid, authKey).then(
-            (user) => {
-              console.log('User logged in successfully:', user);
-            },
-            (error) => {
-              console.error('Error logging in user:', error); // Thêm lỗi ở đây
-            },
-          );
-        }
       } catch (error) {
         console.log('LOGIN ERROR : ', error);
       }

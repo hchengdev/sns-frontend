@@ -7,16 +7,13 @@ import Footer from './components/Footer';
 import UpdateProfile from './features/user/components/UpdateProfile';
 import UserProfile from './features/user/components/Profile';
 import AllListFriend from './features/friend/components/AllListFriend';
-import 'react-toastify/dist/ReactToastify.css';
 import AllListFollowers from './features/friend/components/AllListFollowers';
 import { ToastContainer } from 'react-toastify';
 import UpdatePassword from './features/user/components/EditPassword.jsx';
 import FriendProfile from './features/friend/components/FriendProfile';
 import UserList from './features/user/components/UserSearchList';
-
-// import Comments from './features/comment/components/Comment';
-// import Dashboard from './features/admin/components/Dashboard';
-// import SearchForm from './features/post/components/SearchForm'
+import Cometchat from './features/callvideo/components/callVideo.jsx';
+import CreateGroupDemo from './features/callvideo/components/CreateGroup.jsx';
 
 const Layout = () => (
   <>
@@ -32,6 +29,7 @@ const App = () => {
       <ToastContainer />
       <BrowserRouter>
         <Routes>
+          <Route path="/create-group" element={<CreateGroupDemo />} />
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
             <Route path="/update-profile" element={<UpdateProfile />} />
@@ -41,6 +39,7 @@ const App = () => {
             <Route path="/update-password" element={<UpdatePassword />} />
             <Route path="/users/:id" element={<FriendProfile />} />
             <Route path="/search-users" element={<UserList />} />
+            <Route path="/cometchat" element={<Cometchat />} />
           </Route>
           <Route path="/login" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />

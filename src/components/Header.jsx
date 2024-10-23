@@ -5,6 +5,8 @@ import userService from '../../src/features/user/services/user';
 import { useEffect, useState } from 'react';
 import { getUserFromLocalStorage } from '../utils/axiosClient';
 import SearchForm from '../features/user/components/SearchForm';
+import { CometChatUIKit } from '@cometchat/chat-uikit-react'; //import uikit package
+
 import {
   faUser,
   faPencilAlt,
@@ -15,6 +17,8 @@ import { Link } from 'react-router-dom';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const Header = () => {
+  const authToken = 'b24d589b248dd859c97be2e794a4c73ff14805c1';
+
   const dispatch = useDispatch();
   const storedUser = getUserFromLocalStorage();
   const id = storedUser ? storedUser.id : null;
@@ -41,6 +45,8 @@ const Header = () => {
   }, []);
   const handleLogout = () => {
     dispatch(logout());
+    CometChatUIKit.logout();
+    console.log('logout successfully');
   };
   return (
     <header className="fix relative left-0 top-0 z-50 w-full">
