@@ -5,6 +5,8 @@ import { logout } from '../features/auth/store/authSlice';
 import userService from '../../src/features/user/services/user';
 import { getUserFromLocalStorage } from '../utils/axiosClient';
 import SearchForm from '../features/user/components/SearchForm';
+import { CometChatUIKit } from '@cometchat/chat-uikit-react'; //import uikit package
+
 import {
   faUser,
   faPencilAlt,
@@ -17,6 +19,8 @@ import { MessageOutlined } from '@ant-design/icons';
 import NotificationsList from '../features/notifications/components/NotificationsList';
 
 const Header = () => {
+  const authToken = 'b24d589b248dd859c97be2e794a4c73ff14805c1';
+
   const dispatch = useDispatch();
   const storedUser = getUserFromLocalStorage();
   const id = storedUser ? storedUser.id : null; // Lấy ID người dùng
@@ -46,6 +50,8 @@ const Header = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    CometChatUIKit.logout();
+    console.log('logout successfully');
   };
 
   const toggleNotifications = () => {
