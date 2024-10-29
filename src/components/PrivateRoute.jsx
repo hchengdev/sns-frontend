@@ -1,11 +1,22 @@
 import { useSelector } from 'react-redux';
+import { Outlet } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
-const PrivateRoute = ({ children }) => {
-  const auth = useSelector((state) => state.auth);
+const Layout = () => (
+  <>
+    <Header />
+    <Outlet />
+    <Footer />
+  </>
+);
 
-  // console.log('private route auth ', auth)
-  return auth.isAuthenticated ? children : <Navigate to="/login" />;
+const PrivateRoute = () => {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+  console.log('Authenticated in PrivateRoute:', isAuthenticated);
+  return isAuthenticated ? <Layout /> : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;
