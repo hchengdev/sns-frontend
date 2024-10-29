@@ -12,6 +12,19 @@ import UpdatePassword from './features/user/components/EditPassword.jsx';
 import FriendProfile from './features/friend/components/FriendProfile';
 import UserList from './features/user/components/UserSearchList';
 import Cometchat from './features/callvideo/components/callVideo.jsx';
+
+import Comments from './features/comment/components/Comment';
+import SearchForm from './features/post/components/SearchForm';
+import Notifications from './features/notifications/components/Notifications.jsx';
+import UserSearchList from './features/user/components/UserSearchList.jsx';
+
+const Layout = () => (
+  <>
+    <Header />
+    <Outlet />
+    <Footer />
+  </>
+);
 import CreateGroupDemo from './features/callvideo/components/CreateGroup.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';
 
@@ -25,6 +38,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/update-profile" element={<UpdateProfile />} />
             <Route path="/me" element={<UserProfile />} />
+            <Route path="/posts" element={<SearchForm />} />
             <Route path="/list-friend" element={<AllListFriend />} />
             <Route path="/list-followers" element={<AllListFollowers />} />
             <Route path="/update-password" element={<UpdatePassword />} />

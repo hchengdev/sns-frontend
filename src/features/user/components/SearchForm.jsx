@@ -65,7 +65,7 @@ const SearchForm = () => {
   };
 
   return (
-    <div className="top-search relative w-full" ref={searchRef}>
+    <div className="top-search relative w-[80%]" ref={searchRef}>
       <form onSubmit={handleSubmit} method="post" className="flex">
         <input
           type="text"
