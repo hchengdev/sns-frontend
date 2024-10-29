@@ -13,10 +13,10 @@ export const getNotifications = createAsyncThunk(
       return response; // Hoàn trả dữ liệu
     } catch (error) {
       return rejectWithValue(
-        error.response ? error.response.data : error.message
+        error.response ? error.response.data : error.message,
       );
     }
-  }
+  },
 );
 
 // Async thunk để đánh dấu tất cả thông báo là đã đọc
@@ -27,10 +27,10 @@ export const markAllAsRead = createAsyncThunk(
       await markAllNotificationsAsRead(userId); // Gọi hàm từ service
     } catch (error) {
       return rejectWithValue(
-        error.response ? error.response.data : error.message
+        error.response ? error.response.data : error.message,
       );
     }
-  }
+  },
 );
 
 // Tạo slice cho notifications
@@ -57,7 +57,7 @@ const notificationsSlice = createSlice({
         state.error = action.payload; // Xử lý lỗi
       })
       .addCase(markAllAsRead.fulfilled, (state) => {
-        state.notifications = state.notifications.map(notification => ({
+        state.notifications = state.notifications.map((notification) => ({
           ...notification,
           isRead: true, // Đánh dấu tất cả thông báo là đã đọc
         }));

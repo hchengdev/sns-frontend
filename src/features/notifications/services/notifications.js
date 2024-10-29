@@ -15,7 +15,7 @@ export const fetchNotifications = async (userId) => {
 export const markAllNotificationsAsRead = async (userId) => {
   try {
     await axios.get(`/apihost/api/v1/notifications/mark-all-read`, {
-      params: { userId } // Truyền tham số userId
+      params: { userId }, // Truyền tham số userId
     });
   } catch (error) {
     console.error('Error marking notifications as read:', error);

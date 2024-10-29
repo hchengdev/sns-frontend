@@ -1,7 +1,14 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getNotifications, markAllAsRead } from '../store/notificationsSlice.js';
-import { selectNotifications, selectLoading, selectError } from '../store/notificationsSlice.js';
+import {
+  getNotifications,
+  markAllAsRead,
+} from '../store/notificationsSlice.js';
+import {
+  selectNotifications,
+  selectLoading,
+  selectError,
+} from '../store/notificationsSlice.js';
 import NotificationsList from './NotificationsList';
 
 const Notifications = ({ userId }) => {
