@@ -1,30 +1,38 @@
-import { useEffect, useState } from 'react';
-import { fetchNotifications } from '../services/notifications.js';
-import { List, Spin, Alert } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { fetchNotifications } from '../services/notifications.js'; // Nhập service
+import { List, Spin, Alert } from 'antd'; // Nhập các component cần thiết từ antd
 
 const NotificationsList = ({ userId }) => {
+  // Thêm userId như prop
   const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true); // Trạng thái loading
+  const [error, setError] = useState(null); // Trạng thái lỗi
 
   useEffect(() => {
     const loadNotifications = async () => {
-      setLoading(true);
+      setLoading(true); // Bắt đầu loading
       try {
-        const data = await fetchNotifications(userId);
-        setNotifications(data);
+        const data = await fetchNotifications(userId); // Gọi service để lấy thông báo
+        setNotifications(data); // Cập nhật danh sách thông báo
       } catch (err) {
-        setError(err);
+        setError(err); // Cập nhật lỗi nếu có
       } finally {
-        setLoading(false);
+        setLoading(false); // Kết thúc loading
       }
     };
 
     loadNotifications();
-  }, [userId]);
+  }, [userId]); // Chạy lại effect khi userId thay đổi
 
-  if (loading) return <Spin tip="Loading notifications..." />;
-  if (error) return <Alert message="Error fetching notifications" description={error.message} type="error" />; // Hiển thị lỗi
+  if (loading) return <Spin tip="Loading notifications..." />; // Hiển thị loading
+  if (error)
+    return (
+      <Alert
+        message="Error fetching notifications"
+        description={error.message}
+        type="error"
+      />
+    ); // Hiển thị lỗi
 
   return (
     <div className="notifications-list">
@@ -34,9 +42,10 @@ const NotificationsList = ({ userId }) => {
         <List
           bordered
           dataSource={notifications}
-          renderItem={notification => (
+          renderItem={(notification) => (
             <List.Item key={notification.id}>
-              {notification.message}
+              {notification.message}{' '}
+              {/* Giả sử thông báo có thuộc tính message */}
             </List.Item>
           )}
         />

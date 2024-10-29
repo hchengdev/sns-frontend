@@ -74,7 +74,6 @@ const SearchForm = () => {
           </div>
         </div>
       </div>
-
       <div className="hidden lg:block w-1/5">
         <div className="sticky top-24">
           <ListFollowerAndFriendUser />

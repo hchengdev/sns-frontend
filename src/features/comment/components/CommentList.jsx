@@ -1,37 +1,21 @@
-
 import { List, Avatar } from 'antd';
-import Comment from './Comment';
-import { useEffect, useState } from 'react';
 
-const CommentList = ({ comments, onUpdate }) => {
-  const [updatedComments, setUpdatedComments] = useState(comments);
-
-  useEffect(() => {
-    setUpdatedComments(comments);
-  }, [comments]);
-
-
+const CommentList = ({ comments }) => {
   return (
     <List
       itemLayout="horizontal"
-      dataSource={updatedComments}
+      dataSource={comments}
       renderItem={comment => {
-        const avatarSrc = comment.createdBy?.profilePicture
-          ? `/apihost/image/${comment.createdBy.profilePicture}`
-          : '/path/to/default/image.png';
-
+        const avatarSrc = comment.createdBy?.profilePicture;
+        const userName = comment.createdBy ? comment.createdBy.name : 'Unknown User';
         return (
           <List.Item>
             <List.Item.Meta
               avatar={<Avatar src={avatarSrc} />}
-              title={
-                <div>
-                  <span>{comment.createdBy?.name || 'Unknown User'}</span>
-                  <Comment comment={comment} showOptions={true} onUpdate={onUpdate} />
-                </div>
-              }
-              description={comment.createdAt || 'Unknown Date'}
+              title={userName}
+              description={comment.content}
             />
+            <div>{comment.createdAt}</div>
           </List.Item>
         );
       }}
