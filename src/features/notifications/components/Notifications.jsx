@@ -12,12 +12,12 @@ const Notifications = ({ userId }) => {
 
   useEffect(() => {
     if (userId) {
-      dispatch(getNotifications(userId)); // Gọi hàm để lấy thông báo
+      dispatch(getNotifications(userId));
     }
   }, [dispatch, userId]);
 
   const handleMarkAllAsRead = () => {
-    dispatch(markAllAsRead(userId)); // Gọi hàm để đánh dấu tất cả thông báo là đã đọc
+    dispatch(markAllAsRead(userId));
   };
 
   if (loading) return <div>Loading...</div>;

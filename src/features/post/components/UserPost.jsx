@@ -29,7 +29,7 @@ const UserPost = () => {
   }
 
   return (
-    <div>
+    <div className={'w-[75vh]'}>
       <PostForm />
       <div>
         {userPosts.map((post) => (

@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import ListFollowerAndFriendUser from '../../friend/components/ListFollowerAndFriendUser';
 import { getUserFromLocalStorage } from '../../../utils/axiosClient';
 import friendService from '../../../features/friend/services/friend';
+// import {getAllPosts} from '../../post/services/post.js';
 import { useDispatch } from 'react-redux';
 
 const Profile = () => {
@@ -69,6 +70,10 @@ const Profile = () => {
     };
     fetchData();
   }, [id, getUser]);
+
+  // useEffect(() => {
+  //   dispatch(getAllPosts())
+  // }, [dispatch()]);
 
   return (
     <div className="grid grid-cols-1 justify-center gap-4 bg-[#f5f5f5] pt-[100px] md:grid-cols-12">

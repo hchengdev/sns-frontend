@@ -1,29 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import { fetchNotifications } from '../services/notifications.js'; // Nhập service
-import { List, Spin, Alert } from 'antd'; // Nhập các component cần thiết từ antd
+import { useEffect, useState } from 'react';
+import { fetchNotifications } from '../services/notifications.js';
+import { List, Spin, Alert } from 'antd';
 
-const NotificationsList = ({ userId }) => { // Thêm userId như prop
+const NotificationsList = ({ userId }) => {
   const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(true); // Trạng thái loading
-  const [error, setError] = useState(null); // Trạng thái lỗi
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const loadNotifications = async () => {
-      setLoading(true); // Bắt đầu loading
+      setLoading(true);
       try {
-        const data = await fetchNotifications(userId); // Gọi service để lấy thông báo
-        setNotifications(data); // Cập nhật danh sách thông báo
+        const data = await fetchNotifications(userId);
+        setNotifications(data);
       } catch (err) {
-        setError(err); // Cập nhật lỗi nếu có
+        setError(err);
       } finally {
-        setLoading(false); // Kết thúc loading
+        setLoading(false);
       }
     };
 
     loadNotifications();
-  }, [userId]); // Chạy lại effect khi userId thay đổi
+  }, [userId]);
 
-  if (loading) return <Spin tip="Loading notifications..." />; // Hiển thị loading
+  if (loading) return <Spin tip="Loading notifications..." />;
   if (error) return <Alert message="Error fetching notifications" description={error.message} type="error" />; // Hiển thị lỗi
 
   return (
@@ -36,7 +36,7 @@ const NotificationsList = ({ userId }) => { // Thêm userId như prop
           dataSource={notifications}
           renderItem={notification => (
             <List.Item key={notification.id}>
-              {notification.message} {/* Giả sử thông báo có thuộc tính message */}
+              {notification.message}
             </List.Item>
           )}
         />
