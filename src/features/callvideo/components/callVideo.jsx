@@ -1,11 +1,11 @@
 import { UIKitSettingsBuilder } from '@cometchat/uikit-shared';
 import { CometChatUIKit } from '@cometchat/chat-uikit-react';
 import { CometChat } from '@cometchat/chat-sdk-javascript';
-import { CometChatConversationsWithMessages } from '@cometchat/chat-uikit-react/';
 import { useEffect, useState } from 'react';
 import userService from '../../user/services/user';
 import { getUserFromLocalStorage } from '../../../utils/axiosClient';
 import { CometChatIncomingCall } from '@cometchat/chat-uikit-react';
+import { CometChatConversationsWithMessages } from "@cometchat/chat-uikit-react";
 
 const Cometchat = () => {
   const { getUser } = userService;
