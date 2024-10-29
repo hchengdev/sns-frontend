@@ -137,6 +137,35 @@ export const getUserByName = createAsyncThunk(
   },
 );
 
+export const emailConfirmation = async ({ email }) => {
+  try {
+    const response = await axios.post('/apihost/api/v1/auth/find-email', {
+      email,
+    });
+    return response.data;
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message || 'Error sending confirmation email';
+    toast.error(errorMessage);
+    throw error;
+  }
+};
+
+export const resetPassword = async ({ code, newPassword }) => {
+  try {
+    const response = await axios.post('/apihost/api/v1/auth/reset-password', {
+      code,
+      newPassword,
+    });
+    return response.data;
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message || 'Error resetting password';
+    toast.error(errorMessage);
+    throw error;
+  }
+};
+
 export default {
   updateUser,
   getUser,
@@ -144,4 +173,6 @@ export default {
   updatePassWord,
   getUsersById,
   getUserByName,
+  emailConfirmation,
+  resetPassword,
 };

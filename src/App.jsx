@@ -14,6 +14,8 @@ import UserList from './features/user/components/UserSearchList';
 import Cometchat from './features/callvideo/components/callVideo.jsx';
 import CreateGroupDemo from './features/callvideo/components/CreateGroup.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';
+import ForgotPassword from './features/user/components/SearchAccount.jsx';
+import ResetPassword from './features/user/components/ForgotPassword.jsx';
 
 const App = () => {
   return (
@@ -37,6 +39,8 @@ const App = () => {
           {/* </Route> */}
           <Route path="/login" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           {/*<Route path="/admin" element={<Dashboard />} />*/}
         </Routes>
       </BrowserRouter>
