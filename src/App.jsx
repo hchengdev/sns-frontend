@@ -18,7 +18,6 @@ import SearchForm from './features/post/components/SearchForm';
 // import Notifications from './features/notifications/components/Notifications.jsx';
 // import UserSearchList from './features/user/components/UserSearchList.jsx';
 
-import CreateGroupDemo from './features/callvideo/components/CreateGroup.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';
 import ForgotPassword from './features/user/components/SearchAccount.jsx';
 import ResetPassword from './features/user/components/ForgotPassword.jsx';
@@ -41,7 +40,6 @@ const App = () => {
             <Route path="/search-users" element={<UserList />} />
             <Route path="/cometchat" element={<Cometchat />} />
           </Route>
-          <Route path="/create-group" element={<CreateGroupDemo />} />
           {/* <Route element={<Layout />}> */}
           {/* </Route> */}
           <Route path="/login" element={<LoginForm />} />
