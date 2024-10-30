@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import NavBar from '../../../components/NavBar';
-import UserPost from '../../post/components/UserPost';
 import userService from '../../user/services/user';
 import { Link, useParams } from 'react-router-dom';
 import ListFriendByFriend from './ListFriendByFirend';
 import friendService from '../services/friend';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import FriendPost  from '../../post/components/FriendPost.jsx';
+import { getAllPosts } from '../../post/services/post.js';
 
 const FriendProfile = () => {
   const { id } = useParams();
@@ -26,7 +27,7 @@ const FriendProfile = () => {
   const [user, setUser] = useState({
     name: '',
     email: '',
-    profile_picture: '',
+    profilePicture: '',
     biography: '',
   });
   const [suggestionList, setSuggestionList] = useState([]);
@@ -35,7 +36,8 @@ const FriendProfile = () => {
   const [followers, setFollowers] = useState([]);
   const [listUpdated, setListUpdated] = useState([]);
   const [isHovered, setIsHovered] = useState(false);
-
+  const { posts } = useSelector((state) => state.post);
+  const [userPosts, setUserPosts] = useState([]);
   const dispatch = useDispatch();
 
   const handleMouseEnter = () => {
@@ -89,12 +91,12 @@ const FriendProfile = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { name, email, profile_picture, biography } = await getUsersById({
+        const { name, email, profilePicture, biography } = await getUsersById({
           id,
         });
 
         setUser({
-          profile_picture,
+          profilePicture,
           name,
           biography,
           email,
@@ -119,6 +121,15 @@ const FriendProfile = () => {
 
     fetchFollowing();
   }, [listUpdated, listFriendUser]);
+
+  useEffect(() => {
+    dispatch(getAllPosts());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const userSpecificPosts = posts.filter((post) => post.userId === id);
+    setUserPosts(userSpecificPosts);
+  }, [posts, id]);
 
   // handle
   const handleUnFriend = async () => {
@@ -157,6 +168,8 @@ const FriendProfile = () => {
     }
   };
 
+  console.log("user", user);
+
   return (
     <div className="space-between mb-12 flex justify-center pt-[100px]">
       <div className="w-[15%]">
@@ -170,8 +183,8 @@ const FriendProfile = () => {
           <div className="flex items-center">
             <img
               src={
-                user.profile_picture
-                  ? `/apihost/image/${user.profile_picture}`
+                user.profilePicture
+                  ? `/apihost/image/${user.profilePicture}`
                   : ''
               }
               className="h-32 w-32 rounded-full object-cover"
@@ -230,7 +243,7 @@ const FriendProfile = () => {
           <div className="mx-auto mb-16 mt-4 flex justify-center gap-6 pl-4">
             <h3 className="cursor-pointer text-base sm:text-xl">
               <span className="text-base text-slate-600 sm:text-xl">
-                10 post
+                {userPosts.length} post
               </span>
             </h3>
             <h3 className="cursor-pointer text-base sm:text-xl">
@@ -244,7 +257,7 @@ const FriendProfile = () => {
               </span>
             </h3>
           </div>
-          <UserPost />
+          <FriendPost />
         </div>
       </div>
       <div className="w-[20%]">

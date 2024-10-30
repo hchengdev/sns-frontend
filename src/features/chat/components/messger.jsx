@@ -13,7 +13,8 @@ import {
     deleteMessage
 } from '../services/messager';
 import { Button } from 'antd';
-import { DeleteOutlined, UserAddOutlined, UsergroupAddOutlined, MessageOutlined, TeamOutlined, SmileOutlined } from '@ant-design/icons';
+import {ArrowLeftOutlined, DeleteOutlined, UserAddOutlined, UsergroupAddOutlined, MessageOutlined, TeamOutlined, SmileOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
 const socket = io('http://localhost:8089');
 const DEFAULT_PROFILE_PIC = 'https://via.placeholder.com/40';
@@ -205,150 +206,168 @@ const ChatApp = () => {
     };
 
     return (
-        <div className="flex flex-col h-screen bg-gray-50" style={{ marginTop: '4rem', height: '46rem' }}>
-            <header className="bg-blue-600 text-white p-4 text-center text-2xl font-bold shadow-md">
-                <MessageOutlined /> Group Chat
-            </header>
-            <div className="flex flex-grow">
-                {/* Left Side: Create Group and User List */}
-                <div className="w-1/4 p-4 border-r border-gray-300 bg-white shadow-lg">
-                    <h3 className="font-bold text-lg mb-2"><UsergroupAddOutlined /> Create New Group:</h3>
-                    <input
-                        type="text"
-                        placeholder="Group name..."
-                        value={groupName}
-                        onChange={(e) => setGroupName(e.target.value)}
-                        className="border border-gray-300 p-2 rounded-lg w-full mb-2"
-                    />
-                    <button onClick={createNewGroup} className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-700 transition duration-300 w-full">
-                        Create Group
-                    </button>
-                    <span className="ml-2">Members: {memberCount}</span>
-                    <h3 className="font-bold text-lg mt-4">Members in Group:</h3>
-                    <button onClick={toggleMemberList} className="bg-blue-600 text-white p-2 rounded-lg mb-2 hover:bg-blue-700 transition duration-300 w-full">
-                        {showMemberList ? 'Hide Members' : 'Show Members'}
-                    </button>
-                    {showMemberList && (
-                        <div className="mb-4">
-                            {userGroups.find(group => group.id === selectedGroupId)?.members.map(member => (
-                                <div key={member.id} className="flex items-center p-2 border-b border-gray-200">
-                                    <img
-                                        src={member.profilePicture ? `/apihost/image/${member.profilePicture}` : DEFAULT_PROFILE_PIC}
-                                        className="w-10 h-10 rounded-full"
-                                        alt={member.name || 'Unknown Member'}
-                                    />
-                                    <span className="ml-2">{member.name || 'Unknown Member'}</span>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                    <h3 className="font-bold text-lg mb-2"><UserAddOutlined /> Add Member:</h3>
-                    <button onClick={toggleUserList} className="bg-blue-600 text-white p-2 rounded-lg mb-2 hover:bg-blue-700 transition duration-300 w-full">
-                        Toggle User List
-                    </button>
-                    {showUserList && (
-                        <ul className="list-none max-h-40 overflow-y-auto border border-gray-300 p-2 mb-2 rounded-lg">
-                            {userList.map(user => (
-                                <li
-                                    key={user.id}
-                                    className={`flex items-center cursor-pointer p-2 hover:bg-blue-100 ${selectedUsers.some(selectedUser => selectedUser.id === user.id) ? 'bg-green-200' : ''}`}
-                                    onClick={() => selectUser(user)}
-                                >
-                                    <img
-                                        src={user.profilePicture ? `/apihost/image/${user.profilePicture}` : DEFAULT_PROFILE_PIC}
-                                        className="w-10 h-10 rounded-full"
-                                        alt={user.name || 'Unknown Member'}
-                                    />
-                                    {user.name}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                    <div className="mt-2">
-                        <strong>Selected Users:</strong> {selectedUsers.map(user => user.name).join(', ')}
-                    </div>
-                    <button onClick={addMember} className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300 mt-2">Confirm Add</button>
-                </div>
+      <div className="flex flex-col h-screen bg-gray-50" style={{ height: '46rem' }}>
+          <header className="bg-blue-600 text-white p-4 text-center text-2xl font-bold shadow-md relative">
+              <Link to="/" className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                  <ArrowLeftOutlined className="text-white text-lg hover:text-gray-200" />
+              </Link>
+              <MessageOutlined /> Group Chat
+          </header>
 
-                {/* Middle: Message Display */}
-                <div className="flex-grow p-4 flex flex-col">
-                    <div className="text-xl font-bold mb-4">
-                        {selectedGroupId && userGroups.find(group => group.id === selectedGroupId)?.name}
+          <div className="flex flex-grow">
+              {/* Left Side: Create Group and User List */}
+              <div className="w-1/4 p-4 border-r border-gray-300 bg-white shadow-lg">
+                  <h3 className="font-bold text-lg mb-2"><UsergroupAddOutlined /> Create New Group:</h3>
+                  <input
+                    type="text"
+                    placeholder="Group name..."
+                    value={groupName}
+                    onChange={(e) => setGroupName(e.target.value)}
+                    className="border border-gray-300 p-2 rounded-lg w-full mb-2"
+                  />
+                  <button onClick={createNewGroup}
+                          className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-700 transition duration-300 w-full">
+                      Create Group
+                  </button>
+                  <span className="ml-2">Members: {memberCount}</span>
+                  <h3 className="font-bold text-lg mt-4">Members in Group:</h3>
+                  <button onClick={toggleMemberList}
+                          className="bg-blue-600 text-white p-2 rounded-lg mb-2 hover:bg-blue-700 transition duration-300 w-full">
+                      {showMemberList ? 'Hide Members' : 'Show Members'}
+                  </button>
+                  {showMemberList && (
+                    <div className="mb-4">
+                        {userGroups.find(group => group.id === selectedGroupId)?.members.map(member => (
+                          <div key={member.id} className="flex items-center p-2 border-b border-gray-200">
+                              <img
+                                src={member.profilePicture ? `/apihost/image/${member.profilePicture}` : DEFAULT_PROFILE_PIC}
+                                className="w-10 h-10 rounded-full"
+                                alt={member.name || 'Unknown Member'}
+                              />
+                              <span className="ml-2">{member.name || 'Unknown Member'}</span>
+                          </div>
+                        ))}
                     </div>
-                    <div className="flex-grow overflow-y-auto border border-gray-300 p-4 mb-4 rounded-lg bg-white shadow-lg" style={{ maxHeight: '400px' }}>
-                        {messages.map((msg, index) => (
-                            <div key={index} className={`flex mb-2 ${msg.sender.id === userId ? 'justify-end' : ''}`} onClick={() => handleMessageClick(msg.id)}>
-                                <div className={`flex items-center p-2 rounded-lg ${msg.sender.id === userId ? 'bg-blue-600 text-white' : 'bg-gray-300'}`}>
-                                    <strong>{usersMap[msg.sender.id]}:</strong> {msg.content}
-                                    {messageInfoVisible === msg.id && (
-                                        <div className="flex items-center mt-1 text-black">
+                  )}
+                  <h3 className="font-bold text-lg mb-2"><UserAddOutlined /> Add Member:</h3>
+                  <button onClick={toggleUserList}
+                          className="bg-blue-600 text-white p-2 rounded-lg mb-2 hover:bg-blue-700 transition duration-300 w-full">
+                      Toggle User List
+                  </button>
+                  {showUserList && (
+                    <ul className="list-none max-h-40 overflow-y-auto border border-gray-300 p-2 mb-2 rounded-lg">
+                        {userList.map(user => (
+                          <li
+                            key={user.id}
+                            className={`flex items-center cursor-pointer p-2 hover:bg-blue-100 ${selectedUsers.some(selectedUser => selectedUser.id === user.id) ? 'bg-green-200' : ''}`}
+                            onClick={() => selectUser(user)}
+                          >
+                              <img
+                                src={user.profilePicture ? `/apihost/image/${user.profilePicture}` : DEFAULT_PROFILE_PIC}
+                                className="w-10 h-10 rounded-full"
+                                alt={user.name || 'Unknown Member'}
+                              />
+                              {user.name}
+                          </li>
+                        ))}
+                    </ul>
+                  )}
+                  <div className="mt-2">
+                      <strong>Selected Users:</strong> {selectedUsers.map(user => user.name).join(', ')}
+                  </div>
+                  <button onClick={addMember}
+                          className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition duration-300 mt-2">Confirm
+                      Add
+                  </button>
+              </div>
+
+              {/* Middle: Message Display */}
+              <div className="flex-grow p-4 flex flex-col">
+                  <div className="text-xl font-bold mb-4">
+                      {selectedGroupId && userGroups.find(group => group.id === selectedGroupId)?.name}
+                  </div>
+                  <div
+                    className="flex-grow overflow-y-auto border border-gray-300 p-4 mb-4 rounded-lg bg-white shadow-lg"
+                    style={{ maxHeight: '400px' }}>
+                      {messages.map((msg, index) => (
+                        <div key={index} className={`flex mb-2 ${msg.sender.id === userId ? 'justify-end' : ''}`}
+                             onClick={() => handleMessageClick(msg.id)}>
+                            <div
+                              className={`flex items-center p-2 rounded-lg ${msg.sender.id === userId ? 'bg-blue-600 text-white' : 'bg-gray-300'}`}>
+                                <strong>{usersMap[msg.sender.id]}:</strong> {msg.content}
+                                {messageInfoVisible === msg.id && (
+                                  <div className="flex items-center mt-1 text-black">
                                             <span className="text-gray-500 text-xs">
                                                 {new Date(msg.timestamp).toLocaleTimeString()}
                                             </span>
-                                            {msg.sender.id === userId && (
-                                                <Button
-                                                    type="link"
-                                                    icon={<DeleteOutlined style={{ color: 'black' }} />}
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleDeleteMessage(msg.id);
-                                                    }}
-                                                    className="ml-2"
-                                                />
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
+                                      {msg.sender.id === userId && (
+                                        <Button
+                                          type="link"
+                                          icon={<DeleteOutlined style={{ color: 'black' }} />}
+                                          onClick={(e) => {
+                                              e.stopPropagation();
+                                              handleDeleteMessage(msg.id);
+                                          }}
+                                          className="ml-2"
+                                        />
+                                      )}
+                                  </div>
+                                )}
                             </div>
-                        ))}
-                        <div ref={messagesEndRef} /> {/* Phần cuộn xuống */}
-                    </div>
-                    <div className="flex items-center mb-2">
-                        <button onClick={() => setEmojiPickerVisible(!emojiPickerVisible)} className="text-gray-600 hover:text-blue-600 mr-2">
-                            <SmileOutlined />
-                        </button>
-                        {emojiPickerVisible && (
-                            <div className="flex mt-2">
-                                {emojis.map((emoji, index) => (
-                                    <button key={index} onClick={() => addEmoji(emoji)} className="p-1 text-2xl">
-                                        {emoji}
-                                    </button>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                    <div className="flex items-center">
-                        <input
-                            type="text"
-                            placeholder="Type a message..."
-                            value={messageContent}
-                            onChange={(e) => setMessageContent(e.target.value)}
-                            className="flex-grow p-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                        <button onClick={sendMessage} className="bg-blue-600 text-white p-2 rounded-r-lg hover:bg-blue-700 transition duration-300">Send</button>
-                    </div>
-                </div>
+                        </div>
+                      ))}
+                      <div ref={messagesEndRef} />
+                      {/* Phần cuộn xuống */}
+                  </div>
+                  <div className="flex items-center mb-2">
+                      <button onClick={() => setEmojiPickerVisible(!emojiPickerVisible)}
+                              className="text-gray-600 hover:text-blue-600 mr-2">
+                          <SmileOutlined />
+                      </button>
+                      {emojiPickerVisible && (
+                        <div className="flex mt-2">
+                            {emojis.map((emoji, index) => (
+                              <button key={index} onClick={() => addEmoji(emoji)} className="p-1 text-2xl">
+                                  {emoji}
+                              </button>
+                            ))}
+                        </div>
+                      )}
+                  </div>
+                  <div className="flex items-center">
+                      <input
+                        type="text"
+                        placeholder="Type a message..."
+                        value={messageContent}
+                        onChange={(e) => setMessageContent(e.target.value)}
+                        className="flex-grow p-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                      <button onClick={sendMessage}
+                              className="bg-blue-600 text-white p-2 rounded-r-lg hover:bg-blue-700 transition duration-300">Send
+                      </button>
+                  </div>
+              </div>
 
-                {/* Right Side: User Groups */}
-                <aside className="w-1/4 p-4 border-l border-gray-300 bg-white shadow-lg">
-                    <h3 className="font-bold text-lg mb-2"><TeamOutlined /> Your Groups:</h3>
-                    <ul className="list-none mb-4">
-                        {userGroups.map(group => (
-                            <li
-                                key={group.id}
-                                className={`cursor-pointer p-2 hover:bg-blue-100 ${selectedGroupId === group.id ? 'bg-blue-200' : ''}`}
-                                onClick={() => selectGroup(group.id)}
-                            >
-                                <div className="flex items-center">
-                                    <UsergroupAddOutlined className="text-blue-600 mr-2" style={{ fontSize: '24px' }} />
-                                    <span className="ml-2">{group.name}</span>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                </aside>
-            </div>
-        </div>
+              {/* Right Side: User Groups */}
+              <aside className="w-1/4 p-4 border-l border-gray-300 bg-white shadow-lg">
+                  <h3 className="font-bold text-lg mb-2"><TeamOutlined /> Your Groups:</h3>
+                  <ul className="list-none mb-4">
+                      {userGroups.map(group => (
+                        <li
+                          key={group.id}
+                          className={`cursor-pointer p-2 hover:bg-blue-100 ${selectedGroupId === group.id ? 'bg-blue-200' : ''}`}
+                          onClick={() => selectGroup(group.id)}
+                        >
+                            <div className="flex items-center">
+                                <UsergroupAddOutlined className="text-blue-600 mr-2" style={{ fontSize: '24px' }} />
+                                <span className="ml-2">{group.name}</span>
+                            </div>
+                        </li>
+                      ))}
+                  </ul>
+              </aside>
+          </div>
+      </div>
     );
 };
 

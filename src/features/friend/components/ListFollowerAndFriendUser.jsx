@@ -51,16 +51,19 @@ const ListFriend = () => {
     fetchWaitingRequests();
   }, [getWaiting, listFriendUser]);
 
-  const handleAccept = (userId) => {
+  const handleAccept = async (userId) => {
     try {
-      acceptFriends({ id: userId });
+      await acceptFriends({ id: userId }); // Đợi xử lý xác nhận kết bạn
       setFriendRequests(friendRequests.filter((user) => user.id !== userId));
       toast.success('Đã xác nhận yêu cầu kết bạn thành công!');
-      fetchFollowing();
+
+      // Gọi lại hàm để cập nhật danh sách bạn bè
+      await fetchFollowing();
     } catch {
       toast.error('Có lỗi xảy ra, vui lòng thử lại.');
     }
   };
+
 
   const handleReject = (id) => {
     try {

@@ -28,7 +28,11 @@ const PostList = () => {
   });
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <div className="flex h-[80vh] items-center justify-center">
+      <div className="relative h-12 w-12 animate-[spin_linear_1s_infinite_alternate] rounded-full bg-white">
+        <div className="absolute inset-1 rounded-full border-4 border-transparent border-t-[#34465d]"></div>
+      </div>
+    </div>;
   }
 
   if (error) {
