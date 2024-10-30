@@ -59,11 +59,10 @@ export default function Login() {
               type="text"
               name="email"
               placeholder="Email"
-              className={`mb-4 w-full border p-3 ${
-                formik.errors.email && formik.touched.email
+              className={`mb-4 w-full border p-3 ${formik.errors.email && formik.touched.email
                   ? 'border-red-500'
                   : 'border-gray-300'
-              } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
               value={formik.values.email}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -76,11 +75,10 @@ export default function Login() {
               type="password"
               name="password"
               placeholder="Mật khẩu"
-              className={`mb-4 w-full border p-3 ${
-                formik.errors.password && formik.touched.password
+              className={`mb-4 w-full border p-3 ${formik.errors.password && formik.touched.password
                   ? 'border-red-500'
                   : 'border-gray-300'
-              } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
               value={formik.values.password}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
