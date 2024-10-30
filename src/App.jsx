@@ -20,6 +20,7 @@ import UserSearchList from './features/user/components/UserSearchList.jsx';
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import EmailConfirmation from './features/user/components/SearchAccount.jsx';
 import ResetPassword from './features/user/components/ForgotPassword.jsx';
+import Dashboard from './features/admin/components/Dashboard.jsx';
 
 
 
@@ -32,6 +33,7 @@ const App = () => {
                     <Route path="/posts" element={<SearchForm />} />
                     <Route path="/forgot-password" element={<EmailConfirmation />} />
                     <Route path="/reset-password" element={<ResetPassword />} />
+                    <Route path='/messager' element={<ChatApp />} />
                         <Route element={<PrivateRoute />}>
                             <Route path="/" element={<Home />} />
                             <Route path="/notifications" element={<Notifications />} />
@@ -41,7 +43,7 @@ const App = () => {
                             <Route path="/list-followers" element={<AllListFollowers />} />
                             <Route path="/update-password" element={<UpdatePassword />} />
                             <Route path="/posts/:postId/comments" element={<Comments />} />
-                            <Route path='/messager' element={<ChatApp />} />
+
                             <Route path="/users/:id" element={<FriendProfile />} />
                             <Route path="/search-users" element={<UserList />} />
                             <Route path="/cometchat" element={<Cometchat />} />
@@ -49,7 +51,7 @@ const App = () => {
                     </Route>
                     <Route path="/login" element={<LoginForm />} />
                     <Route path="/register" element={<RegisterForm />} />
-                    {/*<Route path="/admin" element={<Dashboard />} />*/}
+                    <Route path="/admin" element={<Dashboard />} />
                 </Routes>
             </BrowserRouter>
         </>

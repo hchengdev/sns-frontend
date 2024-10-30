@@ -6,23 +6,29 @@ import { Link } from 'react-router-dom';
 import ListFollowerAndFriendUser from '../../friend/components/ListFollowerAndFriendUser';
 import { getUserFromLocalStorage } from '../../../utils/axiosClient';
 import friendService from '../../../features/friend/services/friend';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllPosts } from '../../post/services/post.js';
 
 const Profile = () => {
   const storedUser = getUserFromLocalStorage();
-  const id = storedUser ? storedUser.id : null;
+  const userId = storedUser ? storedUser.id : null;
   const { getUser } = userService;
-  const { getFollowing, getWaiting, getWaitingFriend } = friendService;
+  const { getFollowing, getWaitingFriend } = friendService;
+
   const [user, setUser] = useState({
     name: '',
     email: '',
-    profile_picture: '',
-    biography: '',
+    profilePicture: '',
+    biography: ''
   });
+
   const [suggestionList, setSuggestionList] = useState([]);
   const [followers, setFollowers] = useState([]);
   const dispatch = useDispatch();
+  const { posts } = useSelector((state) => state.post);
+  const [userPosts, setUserPosts] = useState([]);
 
+  // Fetch friends list
   useEffect(() => {
     const fetchFollowing = async () => {
       try {
@@ -32,43 +38,51 @@ const Profile = () => {
         setSuggestionList([]);
       }
     };
-
     fetchFollowing();
-  }, [dispatch, getFollowing]);
+  }, [dispatch]);
 
+  // Fetch followers
   useEffect(() => {
     const fetchWaitingRequests = async () => {
       try {
         const response = await getWaitingFriend();
-
-        setFollowers(response);
+        setFollowers(response || []);
       } catch {
         setFollowers([]);
       }
     };
-
     fetchWaitingRequests();
-  }, [getWaiting]);
+  }, []);
 
+  // Fetch user info
   useEffect(() => {
     const fetchData = async () => {
-      if (id) {
+      if (userId) {
         try {
-          const response = await getUser(id);
+          const response = await getUser(userId);
           setUser({
             profilePicture: response.profilePicture || '',
             name: response.name || '',
             biography: response.biography || '',
-            email: response.email || '',
+            email: response.email || ''
           });
-          console.log('user' + user.email);
         } catch (err) {
           console.error('Error fetching user:', err);
         }
       }
     };
     fetchData();
-  }, [id, getUser]);
+  }, [userId, getUser]);
+
+  // Fetch posts and filter for current user
+  useEffect(() => {
+    dispatch(getAllPosts());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const userSpecificPosts = posts.filter((post) => post.userId === userId);
+    setUserPosts(userSpecificPosts);
+  }, [posts, userId]);
 
   return (
     <div className="grid grid-cols-1 justify-center gap-4 bg-[#f5f5f5] pt-[100px] md:grid-cols-12">
@@ -106,7 +120,7 @@ const Profile = () => {
           <div className="mx-auto mb-16 mt-4 flex justify-center gap-6 pl-4">
             <h3 className="cursor-pointer text-base sm:text-xl">
               <span className="text-base text-slate-600 sm:text-xl">
-                10 post
+                {userPosts.length} posts
               </span>
             </h3>
             <h3 className="cursor-pointer text-base sm:text-xl">
@@ -120,7 +134,7 @@ const Profile = () => {
               </span>
             </h3>
           </div>
-          <UserPost />
+          <UserPost posts={userPosts} />
         </div>
       </div>
 

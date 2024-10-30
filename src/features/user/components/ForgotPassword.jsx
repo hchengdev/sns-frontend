@@ -67,7 +67,7 @@ const ResetPassword = () => {
                       <div>
                         <Field
                             name="code"
-                            type="text"
+                            type="number"
                             placeholder="Nhập mã xác nhận"className="w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         <ErrorMessage
