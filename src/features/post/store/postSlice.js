@@ -45,7 +45,7 @@ const postSlice = createSlice({
       })
       .addCase(createPost.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.posts.push(action.payload);
+        state.posts = [action.payload, ...state.posts]; // Thêm bài viết mới vào đầu
       })
       .addCase(createPost.rejected, (state) => {
         state.isLoading = false;
