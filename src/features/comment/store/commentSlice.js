@@ -7,13 +7,13 @@ import {
   deleteComment,
   countComments,
   toggleLikeComment
-} from '../services/comment.js';
+} from '../services/comment';
 
 const initialState = {
   comments: [],
   commentCount: 0,
   loading: false,
-  error: null,
+  error: null
 };
 
 const commentSlice = createSlice({
@@ -124,9 +124,11 @@ const commentSlice = createSlice({
         state.error = null;
       })
       .addCase(toggleLikeComment.fulfilled, (state, action) => {
-        const index = state.comments.findIndex(comment => comment.id === action.payload.id);
-        if (index >= 0) {
-          state.comments[index].isLiked = action.payload.isLiked;
+        const updatedComment = action.payload;
+        const index = state.comments.findIndex(comment => comment.id === updatedComment.id);
+        if (index !== -1) {
+          state.comments[index].likeCount = updatedComment.likeCount;
+          state.comments[index].likeByUsers = updatedComment.likeByUsers;
         }
         state.loading = false;
       })
@@ -134,7 +136,7 @@ const commentSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       });
-  },
+  }
 });
 
 export default commentSlice.reducer;
