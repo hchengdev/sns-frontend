@@ -103,7 +103,7 @@ const Header = () => {
             <span className="status f-online absolute bottom-2 right-1"></span>
 
             <div
-              className="user-setting absolute right-14 top-[65px] z-10 hidden w-48 items-center rounded-lg bg-white text-center shadow-lg group-hover:block">
+              className="user-setting absolute right-[1rem] top-[65px] z-10 hidden w-48 items-center rounded-lg bg-white text-center shadow-lg group-hover:block">
               <ul className="log-out">
                 <li className="w-[100%] rounded-lg py-1 hover:bg-gray-200">
                   <Link
