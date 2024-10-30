@@ -96,9 +96,9 @@ export default function Login() {
               Login
             </button>
 
-            <a href="#" className="mt-4 block text-center text-blue-600">
+            <Link to={'/forgot-password'} className="mt-4 block text-center text-blue-600">
               Forgot password?
-            </a>
+            </Link>
 
             <hr className="my-6 border-gray-200" />
 

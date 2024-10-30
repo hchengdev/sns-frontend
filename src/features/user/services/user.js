@@ -139,13 +139,11 @@ export const getUserByName = createAsyncThunk(
 
 export const emailConfirmation = async ({ email }) => {
   try {
-    const response = await axios.post('/apihost/api/v1/auth/find-email', {
-      email,
-    });
+    const response = await axios.post(`/apihost/v1/auth/find-email?email=${email}`);
     return response.data;
   } catch (error) {
     const errorMessage =
-      error.response?.data?.message || 'Error sending confirmation email';
+        error.response?.data?.message || 'No account found';
     toast.error(errorMessage);
     throw error;
   }
@@ -153,14 +151,11 @@ export const emailConfirmation = async ({ email }) => {
 
 export const resetPassword = async ({ code, newPassword }) => {
   try {
-    const response = await axios.post('/apihost/api/v1/auth/reset-password', {
-      code,
-      newPassword,
-    });
+    const response = await axios.post(`/apihost/v1/auth/reset-password?code=${code}&newPassword=${newPassword}`);
     return response.data;
   } catch (error) {
     const errorMessage =
-      error.response?.data?.message || 'Error resetting password';
+        error.response?.data?.message || 'Incorrect confirmation code';
     toast.error(errorMessage);
     throw error;
   }

@@ -18,6 +18,8 @@ import SearchForm from './features/post/components/SearchForm'
 import Notifications from './features/notifications/components/Notifications.jsx';
 import UserSearchList from './features/user/components/UserSearchList.jsx';
 import PrivateRoute from "./components/PrivateRoute.jsx";
+import EmailConfirmation from './features/user/components/SearchAccount.jsx';
+import ResetPassword from './features/user/components/ForgotPassword.jsx';
 
 
 
@@ -28,7 +30,8 @@ const App = () => {
             <BrowserRouter>
                 <Routes>
                     <Route path="/posts" element={<SearchForm />} />
-
+                    <Route path="/forgot-password" element={<EmailConfirmation />} />
+                    <Route path="/reset-password" element={<ResetPassword />} />
                         <Route element={<PrivateRoute />}>
                             <Route path="/" element={<Home />} />
                             <Route path="/notifications" element={<Notifications />} />
