@@ -27,6 +27,7 @@ const Layout = () => (
   </>
 );
 
+
 const App = () => {
   return (
     <>
@@ -51,8 +52,11 @@ const App = () => {
             <Route path="/search-users" element={<UserSearchList />} />
 
           </Route>
+
           <Route path="/login" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           {/*<Route path="/admin" element={<Dashboard />} />*/}
         </Routes>
       </BrowserRouter>
