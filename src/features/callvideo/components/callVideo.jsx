@@ -1,10 +1,10 @@
 import { UIKitSettingsBuilder } from '@cometchat/uikit-shared';
 import { CometChatUIKit } from '@cometchat/chat-uikit-react';
-import { CometChat } from '@cometchat/chat-sdk-javascript';
+import { CometChatConversationsWithMessages } from '@cometchat/chat-uikit-react/';
 import { useEffect, useState } from 'react';
 import userService from '../../user/services/user';
 import { getUserFromLocalStorage } from '../../../utils/axiosClient';
-import { CometChatIncomingCall, CometChatConversationsWithMessages } from '@cometchat/chat-uikit-react';
+import { CometChatIncomingCall } from '@cometchat/chat-uikit-react';
 
 const Cometchat = () => {
   const { getUser } = userService;
@@ -13,14 +13,13 @@ const Cometchat = () => {
 
   const [user, setUser] = useState({
     name: '',
-    profilePicture: '',
+    profile_picture: '',
   });
-  const [userLoaded, setUserLoaded] = useState(false);
 
   const COMETCHAT_CONSTANTS = {
-    APP_ID: '26602972c7114741',
+    APP_ID: '266146ca0173e2e9',
     REGION: 'us',
-    AUTH_KEY: 'b24d589b248dd859c97be2e794a4c73ff14805c1',
+    AUTH_KEY: '0884de6de3b44550b0bed2993ad63e4b8bc2823a',
   };
 
   const authKey = COMETCHAT_CONSTANTS.AUTH_KEY;
@@ -38,78 +37,80 @@ const Cometchat = () => {
           profilePicture: response.profilePicture || '',
           name: response.name || '',
         });
-        setUserLoaded(true);
       } catch (err) {
-        console.error('Lỗi khi lấy thông tin người dùng:', err);
+        console.error('Error fetching user:', err);
       }
     };
     fetchData();
   }, [getUser]);
 
   useEffect(() => {
-    if (!userLoaded) return;
-
+    // Khởi tạo CometChat UIKit
     const UIKitSettings = new UIKitSettingsBuilder()
-        .setAppId(COMETCHAT_CONSTANTS.APP_ID)
-        .setRegion(COMETCHAT_CONSTANTS.REGION)
-        .setAuthKey(COMETCHAT_CONSTANTS.AUTH_KEY)
-        .subscribePresenceForAllUsers()
-        .build();
+      .setAppId(COMETCHAT_CONSTANTS.APP_ID)
+      .setRegion(COMETCHAT_CONSTANTS.REGION)
+      .setAuthKey(COMETCHAT_CONSTANTS.AUTH_KEY)
+      .subscribePresenceForAllUsers()
+      .build();
 
     CometChatUIKit.init(UIKitSettings)
-        .then(() => {
-          CometChatUIKit.getLoggedinUser()
-              .then((user) => {
-                if (!user) {
-                  CometChatUIKit.login(UID)
+      .then(() => {
+        // Kiểm tra nếu người dùng đã đăng nhập
+        CometChatUIKit.getLoggedinUser()
+          .then((user) => {
+            if (!user) {
+              // Nếu người dùng chưa đăng nhập, thực hiện đăng nhập
+              CometChatUIKit.login(UID)
+                .then((user) => {
+                  console.log('Đăng nhập thành công:', { user });
+                  setLoggedInUser(user); // Lưu người dùng đã đăng nhập
+                })
+                .catch((error) => {
+                  if (error.code === 'ERR_UID_NOT_FOUND') {
+                    // Nếu người dùng không tồn tại, thực hiện đăng ký và đăng nhập
+                    var newUser = new CometChat.User(UID);
+                    newUser.setName(name);
+                    CometChatUIKit.createUser(newUser, authKey)
                       .then((user) => {
-                        console.log('Đăng nhập thành công:', user);
-                        setLoggedInUser(user);
+                        console.log('Tạo người dùng thành công:', user);
+                        // Sau khi tạo, thực hiện đăng nhập
+                        CometChatUIKit.login(UID, authKey)
+                          .then((loggedInUser) => {
+                            console.log('Đăng nhập thành công:', loggedInUser);
+                            setLoggedInUser(loggedInUser);
+                          })
+                          .catch(console.log);
                       })
-                      .catch((error) => {
-                        if (error.code === 'ERR_UID_NOT_FOUND') {
-                          // Tạo người dùng mới với ảnh đại diện
-                          const newUser = new CometChat.User(UID);
-                          newUser.setName(name);
+                      .catch(console.log);
+                  } else {
+                    console.log('Lỗi khi đăng nhập:', error);
+                  }
+                });
+            } else {
+              // Người dùng đã đăng nhập
+              setLoggedInUser(user);
+            }
+          })
+          .catch(console.log);
+        setIsInitialized(true); // Đặt trạng thái khởi tạo thành true
+      })
+      .catch(console.log);
+  }, [user.name, id]);
 
-                          CometChatUIKit.createUser(newUser, authKey)
-                              .then((user) => {
-                                console.log('Tạo người dùng thành công:', user);
-                                CometChatUIKit.login(UID, authKey)
-                                    .then((loggedInUser) => {
-                                      console.log('Đăng nhập thành công:', loggedInUser);
-                                      setLoggedInUser(loggedInUser);
-                                    })
-                                    .catch(console.log);
-                              })
-                              .catch(console.log);
-                        } else {
-                          console.log('Lỗi khi đăng nhập:', error);
-                        }
-                      });
-                } else {
-                  setLoggedInUser(user);
-                }
-              })
-              .catch(console.log);
-          setIsInitialized(true);
-        })
-        .catch(console.log);
-  }, [userLoaded, user, id]);
-
+  // Hiển thị thành phần CometChat chỉ sau khi đã khởi tạo và đăng nhập
   return (
-      <div className="h-[100vh] pt-[100px]">
-        {isInitialized && loggedInUser ? (
-            <CometChatConversationsWithMessages />
-        ) : (
-            <div className="flex h-[80vh] items-center justify-center">
-              <div className="relative h-12 w-12 animate-[spin_linear_1s_infinite_alternate] rounded-full bg-white">
-                <div className="absolute inset-1 rounded-full border-4 border-transparent border-t-[#34465d]"></div>
-              </div>
-            </div>
-        )}
-        <CometChatIncomingCall />
-      </div>
+    <div className="h-[100vh] pt-[100px]">
+      {isInitialized && loggedInUser ? (
+        <CometChatConversationsWithMessages />
+      ) : (
+        <div className="flex h-[80vh] items-center justify-center">
+          <div className="relative h-12 w-12 animate-[spin_linear_1s_infinite_alternate] rounded-full bg-white">
+            <div className="absolute inset-1 rounded-full border-4 border-transparent border-t-[#34465d]"></div>
+          </div>
+        </div>
+      )}
+      <CometChatIncomingCall />
+    </div>
   );
 };
 
