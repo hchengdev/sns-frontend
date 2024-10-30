@@ -11,7 +11,6 @@ const SearchForm = () => {
   const dispatch = useDispatch();
 
   // Lấy dữ liệu từ Redux store
-
   const { posts = [], searchResults = [], isLoading, error } = useSelector((state) => state.post);
 
   useEffect(() => {
@@ -57,7 +56,6 @@ const SearchForm = () => {
         <div className="flex-1 overflow-y-auto hide-scrollbar">
           <form onSubmit={handleSubmit} className="flex justify-center items-center pt-20">
             <div className="relative w-[40%]">
-
               <input
                 type="text"
                 placeholder="Tìm kiếm bài viết..."
@@ -75,12 +73,10 @@ const SearchForm = () => {
           </form>
 
           <div className="mt-5 posts-container">
-
             {renderPosts()}
           </div>
         </div>
       </div>
-
     </div>
   );
 };

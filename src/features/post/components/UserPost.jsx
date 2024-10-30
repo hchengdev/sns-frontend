@@ -28,9 +28,8 @@ const UserPost = () => {
     return <p>No posts available for this user.</p>;
   }
 
-
   return (
-    <div className={'w-[75vh]'}>
+    <div>
       <PostForm />
       <div>
         {userPosts.map((post) => (
