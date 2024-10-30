@@ -16,7 +16,9 @@ import Comments from './features/comment/components/Comment';
 import SearchForm from './features/post/components/SearchForm'
 import FriendProfile from './features/friend/components/FriendProfile.jsx';
 import Notifications from './features/notifications/components/Notifications.jsx';
-import ListFriendByFriend from './features/friend/components/ListFriendByFirend.jsx';
+import ListFriendByFriend from './features/friend/components/ListFriendByFirend.jsx'
+import EmailConfirmation from './features/user/components/SearchAccount.jsx';
+import ResetPassword from './features/user/components/ForgotPassword.jsx';
 const Layout = () => (
   <>
     <Header />
@@ -49,6 +51,8 @@ const App = () => {
           </Route>
           <Route path="/login" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
+          <Route path="/forgot-password" element={<EmailConfirmation />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           {/*<Route path="/admin" element={<Dashboard />} />*/}
         </Routes>
       </BrowserRouter>

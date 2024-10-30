@@ -136,6 +136,29 @@ export const getUserByName = createAsyncThunk(
     }
   },
 );
+export const emailConfirmation = async ({ email }) => {
+  try {
+    const response = await axios.post(`/apihost/v1/auth/find-email?email=${email}`);
+    return response.data;
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message || 'No account found';
+    toast.error(errorMessage);
+    throw error;
+  }
+};
+
+export const resetPassword = async ({ code, newPassword }) => {
+  try {
+    const response = await axios.post(`/apihost/v1/auth/reset-password?code=${code}&newPassword=${newPassword}`);
+    return response.data;
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message || 'Incorrect confirmation code';
+    toast.error(errorMessage);
+    throw error;
+  }
+};
 
 export default {
   updateUser,
@@ -144,4 +167,6 @@ export default {
   updatePassWord,
   getUsersById,
   getUserByName,
+  emailConfirmation,
+  resetPassword,
 };

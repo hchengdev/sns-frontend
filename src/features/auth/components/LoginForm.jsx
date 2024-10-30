@@ -1,30 +1,51 @@
-
-import { login } from '../services/auth';
+import { login, handleGoogleCallback } from '../services/auth';
 import Footer from '../../../components/Footer';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const { isAuthenticated } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/');
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    const code = new URLSearchParams(location.search).get('code');
+
+    if (code) {
+      dispatch(handleGoogleCallback(code))
+        .then(data => {
+          if (data && data.redirectUrl) {
+            navigate(data.redirectUrl);
+          }
+        })
+        .catch(error => {
+          console.error('Error during Google callback:', error);
+          toast.error('Failed to authenticate with Google.');
+        });
+    }
+  }, [dispatch, navigate, location.search]);
+
+
+
 
   const loginSchema = object({
     email: string().email('Email không hợp lệ').required('Vui lòng nhập email'),
     password: string()
       .min(6, 'Mật khẩu phải có ít nhất 6 ký tự')
-      .max(32, 'Mật khẩu tối đã 32 ký tự')
+      .max(32, 'Mật khẩu tối đa 32 ký tự')
       .required('Vui lòng nhập mật khẩu'),
   });
 
@@ -33,7 +54,15 @@ export default function Login() {
     validationSchema: loginSchema,
     onSubmit: async (values) => {
       try {
-        dispatch(login(values));
+        const resultAction = await dispatch(login(values));
+        if (login.fulfilled.match(resultAction)) {
+          const { redirectUrl } = resultAction.payload;
+          if (redirectUrl) {
+            navigate(redirectUrl);
+          }
+        } else {
+          toast.error(resultAction.error.message || 'Đăng nhập không thành công');
+        }
       } catch (error) {
         console.log('LOGIN ERROR : ', error);
       }
@@ -61,8 +90,8 @@ export default function Login() {
               name="email"
               placeholder="Email"
               className={`mb-4 w-full border p-3 ${formik.errors.email && formik.touched.email
-                  ? 'border-red-500'
-                  : 'border-gray-300'
+                ? 'border-red-500'
+                : 'border-gray-300'
                 } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
               value={formik.values.email}
               onChange={formik.handleChange}
@@ -77,8 +106,8 @@ export default function Login() {
               name="password"
               placeholder="Mật khẩu"
               className={`mb-4 w-full border p-3 ${formik.errors.password && formik.touched.password
-                  ? 'border-red-500'
-                  : 'border-gray-300'
+                ? 'border-red-500'
+                : 'border-gray-300'
                 } rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
               value={formik.values.password}
               onChange={formik.handleChange}
@@ -97,7 +126,7 @@ export default function Login() {
               Login
             </button>
 
-            <a href="#" className="mt-4 block text-center text-blue-600">
+            <a href="/forgot-password" className="mt-4 block text-center text-blue-600">
               Forgot password?
             </a>
 

@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
+// Đăng nhập
 export const login = createAsyncThunk(
   'auth/login',
   async ({ email, password }, { rejectWithValue }) => {
@@ -23,14 +24,14 @@ export const login = createAsyncThunk(
       }
       return rejectWithValue('Wrong username or password!');
     }
-  },
+  }
 );
 
+// Đăng ký
 export const register = createAsyncThunk(
   'auth/register',
   async ({ email, password, name, birthday, phone }, { rejectWithValue }) => {
     try {
-      // TODO: un-comment these when api is done
       const response = await axios.post('/apihost/api/v1/register', {
         email,
         password,
@@ -38,12 +39,31 @@ export const register = createAsyncThunk(
         birthday,
         phone,
       });
-
       return response.data;
     } catch (error) {
-      return rejectWithValue('bad credentials!');
+      return rejectWithValue('Bad credentials!');
     }
-  },
+  }
 );
 
-export default { login, register };
+export const handleGoogleCallback = createAsyncThunk(
+  'auth/googleCallback',
+  async (code, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`/apihost/auth/google/callback?code=${code}`);
+      if (response.data) {
+        window.localStorage.setItem('sns_user', JSON.stringify(response.data.userDetails));
+        return response.data;
+      }
+      throw new Error('No data returned');
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('Failed to authenticate with Google.');
+      return rejectWithValue('Failed to authenticate with Google.');
+    }
+  }
+);
+
+
+
+export default { login, register, handleGoogleCallback };
